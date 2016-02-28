@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="Combattant.js"></script>
+    <script type="text/javascript" src="PlayArea.js"></script>
+    <STYLE type="text/css">
+p {
+  margin: 0;
+}
+.marked {
+	border-left: 0.25rem solid #008000;
+	border-top: 0.25rem solid #008000;
+}
+.out {
+  position: absolute;
+  left:-999rem;
+	margin-top:-999rem;
+}
+.row {
+  border-bottom: 0.1rem solid #dadada;
+  padding: 0.25rem 0;
+}
+.row:first-child {
+  border-top: 0.1rem solid #dadada;
+}
+.sep {
+  margin-top: 0.5rem;
+}
+    </STYLE>
+    <title>Tracker</title>
+  </head>
+  <body>
+    <div id="main">
+    </div>
+    <div id="ctrl" class="sep">
+      <input type="button" value="[+]" onclick="area.add(primer)"/>
+      <input type="button" value="next" onclick="area.markNext()"/>
+    </div>
+    <div id="primer" class="sep">
+      <p>HP max <input type="text" onchange="area.find(this.getAttribute('data-id')).initFitness();"/>
+        / Con <input type="text" onchange="area.find(this.getAttribute('data-id')).initFitness();"/>
+        <span id="nat">/ Nature <select>
+          <option value="1">std</option>
+          <option value="2">Endurance</option>
+          <option value="0">undead / construct</option>
+        </select></span>
+        / Init <input type="text" onchange="area.sort(this.getAttribute('data-id'))" data-id="primer"/>
+        <input type="button" value="[-]" class="out" onclick="area.delete(this.getAttribute('data-id'));"/>
+      </p>
+      <p>HP <input type="text" onchange="area.find(this.getAttribute('data-id')).updateFitness();"/>
+        <span class="out">&rArr; &laquo;&nbsp;<span data-usage="fitness_out"></span>&nbsp;&raquo;</span>
+      </p>
+    </div>
+
+    <script type="text/javascript">
+var primer = document.getElementById("primer"),
+    area = new PlayArea(document.getElementById("main"));
+    </script>
+  </body>
+</html>
