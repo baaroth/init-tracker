@@ -5,6 +5,7 @@ function PlayArea(node) {
   this.payload = [];
   this.sel = null;
   this.selNext = null;
+  this.currRd = 0;
 }
 PlayArea.prototype={
   add: function(node) {
@@ -57,12 +58,21 @@ PlayArea.prototype={
     } else if (this.sel && this.sel < (this.payload.length - 1)) {
       ++this.sel;
     } else {
+      this.currRd++;
       this.sel = 0;
     }
     this.payload[this.sel].className = "marked";
   },
   payloadAt: function(idx) {
     return this.payload[idx < this.payload.length ? idx : 0];
+  },
+  resetMark: function() {
+    var prev = this.payload[this.sel];
+    if (prev) {
+      prev.className = "";
+    }
+    this.currRd = 0;
+    this.sel = null;
   },
   sort: function(ref) {
     var i, changed, objSelNext;
