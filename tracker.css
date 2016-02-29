@@ -4,13 +4,10 @@ body {
 }
 input, select {
   font-family: "Lucida Console", monospace;
+  font-size: 0.69rem;
 }
 p {
-  margin: 0.125rem;
-}
-.marked {
-	border-left: 0.25rem solid #008000;
-	border-top: 0.25rem solid #008000;
+  margin: 0.125rem 0;
 }
 .num {
   width: 2rem;
@@ -21,12 +18,18 @@ p {
 	margin-top:-999rem;
 }
 .row {
-  border-bottom: 0.1rem solid #dadada;
-  padding: 0.25rem 0;
+  border-bottom: 0.125rem solid #dadada;
+  padding: 0.25rem;
 }
 .row:first-child {
   border-top: 0.125rem solid #dadada;
 }
 .sep {
   margin-top: 1rem;
+}
+/* en dernier pour "gagner" */
+.marked {
+  border-left: 0.25rem solid #008000;
+  border-top: 0.25rem solid #008000;
+  margin-top: 0.125rem;
 }
