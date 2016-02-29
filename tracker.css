@@ -1,0 +1,32 @@
+body {
+  font-family: Verdana, sans-serif;
+  font-size: 0.7rem;
+}
+input, select {
+  font-family: "Lucida Console", monospace;
+}
+p {
+  margin: 0.125rem;
+}
+.marked {
+	border-left: 0.25rem solid #008000;
+	border-top: 0.25rem solid #008000;
+}
+.num {
+  width: 2rem;
+}
+.out {
+  position: absolute;
+  left:-999rem;
+	margin-top:-999rem;
+}
+.row {
+  border-bottom: 0.1rem solid #dadada;
+  padding: 0.25rem 0;
+}
+.row:first-child {
+  border-top: 0.125rem solid #dadada;
+}
+.sep {
+  margin-top: 1rem;
+}
