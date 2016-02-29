@@ -6,6 +6,7 @@ function PlayArea(node) {
   this.sel = null;
   this.selNext = null;
   this.currRd = 0;
+  this.sorted = false;
 }
 PlayArea.prototype={
   add: function(node) {
@@ -15,6 +16,21 @@ PlayArea.prototype={
     this.node.appendChild(decorated.node);
     this.dict.set(name, decorated);
     this.payload.push(decorated);
+    this.sorted = false;
+  },
+  assertSortable: function() {
+    var i, len = this.payload.length;
+    if (len === 0) {
+      alert("no item")
+      return false;
+    }
+    for (i = 0; i < len; ++i) {
+      if (!this.payload[i].fields.init.value) {
+        alert("init missing");
+        return false;
+      }
+    }
+    return true;
   },
   computeNextSel: function(objSelNext) {
     if (objSelNext) {
@@ -36,7 +52,7 @@ PlayArea.prototype={
     this.dict.delete(key);
     this.payload.splice(index, 1);
     this.updatePayloadIdx(index);
-    if (index < this.sel) {
+    if (index <= this.sel) {
       this.selNext = this.sel;
     }
   },
@@ -47,21 +63,24 @@ PlayArea.prototype={
     };
   },
   markNext: function() {
+    this.trace("> markNext ");
     var prev = this.payload[this.sel];
     if (prev) {
       prev.unmark();
     }
 
+    if (!this.sorted) this.sort();
     if (this.selNext) {
       this.sel = this.selNext;
       this.selNext = null;
-    } else if (this.sel && this.sel < (this.payload.length - 1)) {
+    } else if (this.sel != null && this.sel < (this.payload.length - 1)) {
       ++this.sel;
     } else {
-      this.currRd++;
       this.sel = 0;
     }
     this.payload[this.sel].mark();
+    if (this.sel === 0) this.currRd++;
+    this.trace("< markNext ");
   },
   payloadAt: function(idx) {
     return this.payload[idx < this.payload.length ? idx : 0];
@@ -75,25 +94,34 @@ PlayArea.prototype={
     this.sel = null;
   },
   sort: function(ref) {
-    var i, changed, objSelNext;
+    var changed, objSelNext;
     if (ref === "primer") return false;
-    for (i = 0; i < this.payload.length; ++i) {
-      if (!this.payload[i].fields.init.value) {
-        alert("init missing for " + this.payload.node.id);
-        return false;
-      }
-    }
+    if (!this.assertSortable()) return false;
 
+    this.trace("> sort ");
     changed = this.dict.get(ref);
-    if (changed && changed.vals.idx === this.sel) {
+    if (changed && changed.vals.idx <= this.sel) {
       changed.unmark();
-      objSelNext = this.payloadAt(changed.vals.idx+1);
+      objSelNext = this.payloadAt(this.sel+1);
     }
     this.payload.sort(function (a, b) {
       return b.fields.init.value - a.fields.init.value;
     });
     this.updatePayloadIdx(0);
     this.selNext = this.computeNextSel(objSelNext);
+    this.sorted = true;
+    this.trace("< sort ");
+  },
+  trace: function(prefix) {
+    var i, d, out = (prefix||'') + '[';
+    for (i = 0; i < this.payload.length; ++i) {
+      if (i > 0) out += ',';
+      out += this.payload[i].node.id;
+      if (i === this.sel) out += '*';
+      if (i === this.selNext) out +='!';
+    }
+    out += ']';
+    console.log(out);
   },
   updatePayloadIdx(start) {
     var end = this.payload.length;
