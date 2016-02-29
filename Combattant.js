@@ -25,7 +25,7 @@ function Combattant(node, name) {
 
   node.id=name;
   namer.process(name);
-  node.className="row";
+  this.unmark();
   deleteBtn.className="";
   spans[1].className="";
   // done after because modifies 'spans' array
@@ -81,6 +81,12 @@ Combattant.prototype={
     // update view
     this.vals.fitness_idx=0;
     this.updateFitness();
+  },
+  mark: function() {
+    this.node.className += " marked";
+  },
+  unmark: function() {
+    this.node.className = "row";
   },
   updateFitness: function() {
     var hp = this.fields.hp.value,

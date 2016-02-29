@@ -49,7 +49,7 @@ PlayArea.prototype={
   markNext: function() {
     var prev = this.payload[this.sel];
     if (prev) {
-      prev.className = "";
+      prev.unmark();
     }
 
     if (this.selNext) {
@@ -61,7 +61,7 @@ PlayArea.prototype={
       this.currRd++;
       this.sel = 0;
     }
-    this.payload[this.sel].className = "marked";
+    this.payload[this.sel].mark();
   },
   payloadAt: function(idx) {
     return this.payload[idx < this.payload.length ? idx : 0];
@@ -69,7 +69,7 @@ PlayArea.prototype={
   resetMark: function() {
     var prev = this.payload[this.sel];
     if (prev) {
-      prev.className = "";
+      prev.unmark();
     }
     this.currRd = 0;
     this.sel = null;
@@ -85,8 +85,8 @@ PlayArea.prototype={
     }
 
     changed = this.dict.get(key);
-    if (changed && changed.node.className==="marked") {
-      changed.node.className="";
+    if (changed && changed.vals.idx === this.sel) {
+      changed.unmark();
       objSelNext = this.payloadAt(changed.vals.idx+1);
     }
     this.payload.sort(function (a, b) {
