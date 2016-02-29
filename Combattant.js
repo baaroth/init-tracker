@@ -1,6 +1,6 @@
 function Combattant(node, name) {
   var inputs = node.getElementsByTagName("input"),
-      nature = node.getElementsByTagName("select")[0].value,
+      sels = node.getElementsByTagName("select"),
       spans = node.getElementsByTagName("span"),
       namer = new Namer('data-id'),
       deleteBtn = namer.accumulate(inputs[3]);
@@ -19,7 +19,8 @@ function Combattant(node, name) {
     fitness_bpoints: [],
     fitness_states: [],
     hp_nl: 0,
-    hp_tmp: 0
+    hp_tmp: 0,
+    nature: sels[0].value
   };
 
   node.id=name;
@@ -33,14 +34,15 @@ function Combattant(node, name) {
   if (!this.fields.hp.value) {
     this.fields.hp.value = this.fields.hp_max.value;
   }
-  this.initFitness(nature);
+  this.initFitness();
 }
 Combattant.prototype={
-  initFitness:function(nat) {
+  initFitness:function() {
     var pts=this.vals.fitness_bpoints,
         stts=this.vals.fitness_states,
         con=this.fields.con.value,
         max=this.fields.hp_max.value,
+        nat=this.vals.nature,
         h,q,m2,m4,c2,cb;
     // clean old values
     stts.length=0;
