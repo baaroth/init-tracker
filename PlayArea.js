@@ -1,5 +1,5 @@
-function PlayArea(container) {
-  this.container = container;
+function PlayArea(node) {
+  this.node = node;
   this.dict = new Map();
   this.nextIdx = 0;
   this.payload = [];
@@ -11,7 +11,7 @@ PlayArea.prototype={
     var name = "c" + (this.nextIdx++),
         decorated = new Combattant(node.cloneNode(true), name);
 
-    this.container.appendChild(decorated.node);
+    this.node.appendChild(decorated.node);
     this.dict.set(name, decorated);
     this.payload.push(decorated);
   },
@@ -31,7 +31,7 @@ PlayArea.prototype={
     if (!deleted) return false;
 
     index = deleted.idx;
-    this.container.removeChild(deleted.node);
+    this.node.removeChild(deleted.node);
     this.dict.delete(key);
     this.payload.splice(index, 1);
     this.updatePayloadIdx(index);
