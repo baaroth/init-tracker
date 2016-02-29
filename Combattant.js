@@ -2,7 +2,7 @@ function Combattant(node, name) {
   var inputs = node.getElementsByTagName("input"),
       nature = node.getElementsByTagName("select")[0].value,
       spans = node.getElementsByTagName("span"),
-      namer = new Namer(),
+      namer = new Namer('data-id'),
       deleteBtn = namer.accumulate(inputs[3]);
 
   this.idx = 0;
@@ -94,17 +94,18 @@ Combattant.prototype={
   }
 };
 
-function Namer() {
+function Namer(attr_name) {
   this.nodes=[];
+  this.attr_name=attr_name;
 }
 Namer.prototype={
   accumulate: function(node) {
     this.nodes.push(node);
     return node;
   },
-  process: function(name) {
+  process: function(attr_value) {
     while (this.nodes.length > 0) {
-      this.nodes.pop().setAttribute('data-id', name);
+      this.nodes.pop().setAttribute(this.attr_name, attr_value);
     }
   }
 };
