@@ -76,7 +76,7 @@ PlayArea.prototype={
   },
   sort: function(ref) {
     var i, changed, objSelNext;
-    if (ref==="primer") return false;
+    if (ref === "primer") return false;
     for (i = 0; i < this.payload.length; ++i) {
       if (!this.payload[i].fields.init.value) {
         alert("init missing for " + this.payload.node.id);
@@ -84,7 +84,7 @@ PlayArea.prototype={
       }
     }
 
-    changed = this.dict.get(key);
+    changed = this.dict.get(ref);
     if (changed && changed.vals.idx === this.sel) {
       changed.unmark();
       objSelNext = this.payloadAt(changed.vals.idx+1);
@@ -93,7 +93,7 @@ PlayArea.prototype={
       return b.fields.init.value - a.fields.init.value;
     });
     this.updatePayloadIdx(0);
-    this.selNext = nextSel(objSelNext);
+    this.selNext = this.computeNextSel(objSelNext);
   },
   updatePayloadIdx(start) {
     var end = this.payload.length;
