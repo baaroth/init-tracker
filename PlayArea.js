@@ -71,7 +71,11 @@ PlayArea.prototype={
       prev.unmark();
     }
 
-    if (!this.sorted) this.sort();
+    if (!this.sorted && !this.sort()) {
+      console.log("< markNext : sort error");
+      return false;
+    }
+
     if (this.selNext) {
       this.sel = this.selNext;
       this.selNext = null;
@@ -83,11 +87,12 @@ PlayArea.prototype={
     this.payload[this.sel].mark();
     if (this.sel === 0) this.currRd++;
     this.trace("< markNext ");
+    return true;
   },
   payloadAt: function(idx) {
     return this.payload[idx < this.payload.length ? idx : 0];
   },
-  resetMark: function() {
+  resetMarks: function() {
     var prev = this.payload[this.sel];
     if (prev) {
       prev.unmark();
@@ -117,6 +122,7 @@ PlayArea.prototype={
     this.selNext = this.computeNextSel(objSelNext);
     this.sorted = true;
     this.trace("<" + prefix);
+    return true;
   },
   trace: function(prefix) {
     var i, d, out = (prefix||'') + '[';
