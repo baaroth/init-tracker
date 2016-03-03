@@ -5,7 +5,7 @@ function PlayArea(node) {
   this.payload = [];
   this.sel = null;
   this.selNext = null;
-  this.currRd = 0;
+  this.currRd = window.document.getElementById('rd-counter');
   this.sorted = false;
 }
 PlayArea.prototype={
@@ -85,7 +85,7 @@ PlayArea.prototype={
       this.sel = 0;
     }
     this.payload[this.sel].mark();
-    if (this.sel === 0) this.currRd++;
+    if (this.sel === 0) ++this.currRd.value;
     this.trace("< markNext ");
     return true;
   },
@@ -97,7 +97,7 @@ PlayArea.prototype={
     if (prev) {
       prev.unmark();
     }
-    this.currRd = 0;
+    this.currRd.value = 0;
     this.sel = null;
   },
   sort: function(ref) {
