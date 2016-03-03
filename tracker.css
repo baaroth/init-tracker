@@ -19,6 +19,7 @@ p {
 }
 .row {
   border-bottom: 0.125rem solid #dadada;
+  margin-left: 0.5rem;
   padding: 0.25rem;
 }
 .row:first-child {
@@ -28,8 +29,10 @@ p {
   margin-top: 1rem;
 }
 /* en dernier pour "gagner" */
-.marked {
+.row.marked {
   border-left: 0.25rem solid #008000;
   border-top: 0.25rem solid #008000;
   margin-top: 0.125rem;
+  margin-left: 0;
+  padding-left: 0.5rem;
 }
