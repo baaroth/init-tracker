@@ -47,6 +47,7 @@ PlayArea.prototype={
         index;
     if (!deleted) return false;
 
+    this.trace("> delete(" + key + ") ");
     index = deleted.idx;
     this.node.removeChild(deleted.node);
     this.dict.delete(key);
@@ -55,6 +56,7 @@ PlayArea.prototype={
     if (index <= this.sel) {
       this.selNext = this.sel;
     }
+    this.trace("< delete(" + key + ") ");
   },
   find: function(key) {
     return this.dict.get(key) || {
@@ -94,11 +96,15 @@ PlayArea.prototype={
     this.sel = null;
   },
   sort: function(ref) {
-    var changed, objSelNext;
+    var changed, objSelNext, prefix;
     if (ref === "primer") return false;
     if (!this.assertSortable()) return false;
 
-    this.trace("> sort ");
+    prefix = " sort";
+    if (ref) prefix = prefix + "("+ref+")"
+    prefix += " "
+    this.trace(">" + prefix);
+
     changed = this.dict.get(ref);
     if (changed && changed.vals.idx <= this.sel) {
       changed.unmark();
@@ -110,7 +116,7 @@ PlayArea.prototype={
     this.updatePayloadIdx(0);
     this.selNext = this.computeNextSel(objSelNext);
     this.sorted = true;
-    this.trace("< sort ");
+    this.trace("<" + prefix);
   },
   trace: function(prefix) {
     var i, d, out = (prefix||'') + '[';
