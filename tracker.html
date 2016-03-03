@@ -15,7 +15,8 @@
       <input type="button" value="[+]" onclick="area.add(primer)"/>
     </div>
     <div id="primer" class="sep">
-      <p>HP max <input type="text" class="num" onchange="area.find(this.getAttribute('data-id')).initFitness();"/>
+      <p><input type="text" placeholder="name"/>
+        : HP max <input type="text" class="num" onchange="area.find(this.getAttribute('data-id')).initFitness();"/>
         / Con <input type="text" class="num" onchange="area.find(this.getAttribute('data-id')).initFitness();"/>
         <span id="nat">/ Nature <select>
           <option value="1">std</option>

@@ -3,16 +3,16 @@ function Combattant(node, name) {
       sels = node.getElementsByTagName("select"),
       spans = node.getElementsByTagName("span"),
       namer = new Namer('data-id'),
-      deleteBtn = namer.accumulate(inputs[3]);
+      deleteBtn = namer.accumulate(inputs[4]);
 
   this.idx = 0;
   this.node = node;
   this.fields={
-    con: namer.accumulate(inputs[1]),
-    hp: namer.accumulate(inputs[4]),
-    hp_max: namer.accumulate(inputs[0]),
+    con: namer.accumulate(inputs[2]),
+    hp: namer.accumulate(inputs[5]),
+    hp_max: namer.accumulate(inputs[1]),
     fitness: spans[2],
-    init: namer.accumulate(inputs[2])
+    init: namer.accumulate(inputs[3])
   };
   this.vals={
     fitness_idx: 0,
@@ -20,6 +20,7 @@ function Combattant(node, name) {
     fitness_states: [],
     hp_nl: 0,
     hp_tmp: 0,
+    name: inputs[0].value,
     nature: sels[0].value
   };
 
@@ -28,6 +29,7 @@ function Combattant(node, name) {
   this.unmark();
   deleteBtn.className="";
   spans[1].className="";
+  inputs[0].disabled=true;
   // done after because modifies 'spans' array
   node.getElementsByTagName("p")[0].removeChild(spans[0]);
 
