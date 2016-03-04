@@ -111,7 +111,7 @@ PlayArea.prototype={
     this.trace(">" + prefix);
 
     changed = this.dict.get(ref);
-    if (changed && changed.vals.idx <= this.sel) {
+    if (changed && changed.idx <= this.sel) {
       changed.unmark();
       objSelNext = this.payloadAt(this.sel+1);
     }
@@ -138,7 +138,7 @@ PlayArea.prototype={
   updatePayloadIdx(start) {
     var end = this.payload.length;
     for (var i = start; i < end; ++i) {
-      this.payload[i].vals.idx = i;
+      this.payload[i].idx = i;
     }
   }
 };
