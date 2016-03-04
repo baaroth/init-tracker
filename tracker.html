@@ -8,14 +8,11 @@
     <title>Tracker</title>
   </head>
   <body>
-    <div id="main">
-      <p>Rd <input id="rd-counter" type="text" disabled="disabled" value="0" class="num"/>
-        <input type="button" value="reset" onclick="area.resetMarks()"/>
-        <input type="button" value="next" onclick="area.markNext()"/>
-      </p>
-    </div>
-    <div id="ctrl" class="sep">
-      <input type="button" value="[+]" onclick="area.add(primer)"/>
+    <p id="ctrl">Rd <input id="rd-counter" type="text" disabled="disabled" value="0" class="num"/>
+      <input type="button" value="reset" onclick="area.resetMarks()"/>
+      <input type="button" value="next" onclick="area.markNext()"/>
+    </p>
+    <div id="main" class="sep">
     </div>
     <div id="primer" class="sep">
       <p><input type="text" placeholder="name"/>
@@ -33,6 +30,7 @@
         <span class="out">&rArr; &laquo;&nbsp;<span data-usage="fitness_out"></span>&nbsp;&raquo;</span>
       </p>
     </div>
+    <input type="button" value="[+]" onclick="area.add(primer)"/>
 
     <script type="text/javascript">
 var primer = document.getElementById("primer"),
