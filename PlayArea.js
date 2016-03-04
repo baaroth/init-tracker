@@ -34,7 +34,7 @@ PlayArea.prototype={
   },
   computeNextSel: function(objSelNext) {
     if (objSelNext) {
-      for (var i = 0; i < len; ++i) {
+      for (var i = 0; i < this.payload.length; ++i) {
         if (this.payload[i] === onjSelNext) {
           return i;
         }
