@@ -72,6 +72,9 @@ PlayArea.prototype={
       prev.unmark();
     }
 
+    if (this.currRd.value === "") {
+      this.currRd.value = "0";
+    }
     if (!this.sorted && !this.sort()) {
       console.log("< markNext : sort error");
       return false;
@@ -104,13 +107,13 @@ PlayArea.prototype={
     if (prev) {
       prev.unmark();
     }
-    this.currRd.value = 0;
+    this.currRd.value = "";
     this.sel = null;
   },
   sort: function(ref) {
     var changed, objSelNext, prefix;
     if (ref === "primer") return false;
-    if (!this.assertSortable()) return false;
+    if (this.currRd.value === "" || !this.assertSortable()) return false;
 
     prefix = " sort";
     if (ref) prefix = prefix + "("+ref+")"
