@@ -66,7 +66,8 @@ PlayArea.prototype={
   },
   markNext: function() {
     this.trace("> markNext ");
-    var prev = this.payload[this.sel];
+    var prevIdx = this.sel,
+        prev = this.payload[prevIdx];
     if (prev) {
       prev.unmark();
     }
@@ -75,8 +76,14 @@ PlayArea.prototype={
       console.log("< markNext : sort error");
       return false;
     }
+    if (this.payload.length <= 1) {
+      console.log("< markNext : nothing to do");
+      this.sel = null;
+      this.selNext = null;
+      return false;
+    }
 
-    if (this.selNext) {
+    if (this.selNext != null) {
       this.sel = this.selNext;
       this.selNext = null;
     } else if (this.sel != null && this.sel < (this.payload.length - 1)) {
@@ -85,7 +92,7 @@ PlayArea.prototype={
       this.sel = 0;
     }
     this.payload[this.sel].mark();
-    if (this.sel === 0) ++this.currRd.value;
+    if (this.sel === 0 && prevIdx !== this.sel) ++this.currRd.value;
     this.trace("< markNext ");
     return true;
   },
