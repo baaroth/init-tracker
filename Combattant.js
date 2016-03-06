@@ -5,7 +5,7 @@ function Combattant(node, name) {
       spans = node.getElementsByTagName("span"),
       that = this,
       namer = new Namer('data-id'),
-      deleteBtn = namer.accumulate(inputs[4]);
+      deleteBtn = inputs[4];
 
   this.idx = 0;
   this.node = node;
@@ -37,6 +37,7 @@ function Combattant(node, name) {
 
   // behavior
   this.fields.init.addEventListener('change', function () { area.sort(that); });
+  deleteBtn.addEventListener('click', function () { area.delete(that); });
 
   if (!this.fields.hp.value) {
     this.fields.hp.value = this.fields.hp_max.value;

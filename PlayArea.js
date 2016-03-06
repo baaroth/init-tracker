@@ -46,11 +46,11 @@ PlayArea.prototype={
     }
     return null;
   },
-  delete: function(key) {
+  delete: function(deleted) {
     "use strict";
-    var deleted = this.dict.get(key),
-        index;
+    var index, key;
     if (!deleted) return false;
+    key = deleted.node.id;
 
     this.trace("> delete(" + key + ") ");
     index = deleted.idx;
@@ -62,6 +62,10 @@ PlayArea.prototype={
       this.selNext = this.sel;
     }
     this.trace("< delete(" + key + ") ");
+  },
+  deleteKey: function(key) {
+    "use strict";
+    this.delete(this.dict.get(key));
   },
   find: function(key) {
     "use strict";
