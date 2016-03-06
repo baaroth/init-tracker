@@ -1,19 +1,15 @@
 function Combattant(node, name) {
   "use strict";
-  var inputs = node.getElementsByTagName("input"),
-      sels = node.getElementsByTagName("select"),
-      spans = node.getElementsByTagName("span"),
-      that = this,
-      deleteBtn = inputs[4];
+  var m = new Mapper(node);
 
   this.idx = 0;
   this.node = node;
   this.fields={
-    con: inputs[2],
-    hp: inputs[5],
-    hp_max: inputs[1],
-    fitness: spans[2],
-    init: inputs[3]
+    con: m.mapped.con,
+    hp: m.mapped.hp,
+    hp_max: m.mapped.hp_max,
+    fitness: m.mapped.fitness,
+    init: m.mapped.init
   };
   this.vals={
     fitness_idx: 0,
@@ -21,28 +17,13 @@ function Combattant(node, name) {
     fitness_states: [],
     hp_nl: 0,
     hp_tmp: 0,
-    name: inputs[0].value,
-    nature: sels[0].value
+    name: m.mapped.name.value,
+    nature: m.mapped.nature.value
   };
 
   node.id=name;
   this.unmark();
-  deleteBtn.className="";
-  spans[1].className="";
-  inputs[0].disabled=true;
-  // done after because modifies 'spans' array
-  node.getElementsByTagName("p")[0].removeChild(spans[0]);
-
-  // behavior
-  this.fields.con.addEventListener('change', function () { that.initFitness(); });
-  this.fields.hp.addEventListener('change', function () { that.updateFitness(); });
-  this.fields.hp_max.addEventListener('change', function () { that.initFitness(); });
-  this.fields.init.addEventListener('change', function () { area.sort(that); });
-  deleteBtn.addEventListener('click', function () { area.delete(that); });
-
-  if (!this.fields.hp.value) {
-    this.fields.hp.value = this.fields.hp_max.value;
-  }
+  m.prepare(this);
   this.initFitness();
 }
 Combattant.prototype={
