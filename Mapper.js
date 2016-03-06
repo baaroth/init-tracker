@@ -19,6 +19,15 @@ function Mapper(node) {
   };
 };
 Mapper.prototype={
+  fill: function(data) {
+    "use strict";
+    var prop;
+    for (prop in data) {
+      if (data.hasOwnProperty(prop) && this.mapped.hasOwnProperty(prop)) {
+        this.mapped[prop].value = data[prop];
+      }
+    }
+  },
   prepare: function(combattant) {
     "use strict";
     // style

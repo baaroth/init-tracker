@@ -1,4 +1,21 @@
 var store= {
+  load: function(key) {
+    "use strict";
+    var str = localStorage.getItem(key),
+        saved;
+    if (!str) {
+      console.log("no such element: '" + key + "'");
+    } else {
+      try {
+        saved = JSON.parse(str);
+        primerM.fill(saved);
+        return true;
+      } catch(e) {
+        console.log("[load] unable to parse data", e);
+      }
+    }
+    return false;
+  },
   save: function(combattant) {
     "use strict";
     var key = combattant.vals.name,
