@@ -19,6 +19,20 @@ var store= {
     var body = JSON.stringify(store.viewOf(combattant));
     setTimeout(function() { localStorage.setItem(combattant.vals.name, body); }, 0);
   },
+  saveSession: function(key) {
+    "use strict";
+    var i, key, body = {
+      rd: area.currRd.value,
+      sel: area.sel,
+      selNext: area.selNext,
+      sorted: area.sorted,
+      cs: []
+    };
+    for (i = 0; i < area.payload.length; ++i) {
+      body.cs.push(store.viewOf(area.payload[i]));
+    }
+    setTimeout(function() { localStorage.setItem(key, JSON.stringify(body)); }, 0);
+  },
   viewOf: function(combattant) {
     "use strict";
     return {

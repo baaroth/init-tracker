@@ -13,6 +13,8 @@
     <p id="ctrl">Rd <input id="rd-counter" type="text" disabled="disabled" value="" class="num"/>
       <input type="button" value="reset" onclick="area.resetMarks()"/>
       <input type="button" value="next" onclick="area.markNext()"/>
+      / session <input id="session" type="text"/>
+      <input type="button" value="save" onclick="store.saveSession(session.value)"/>
     </p>
     <div id="main" class="sep">
     </div>
@@ -43,6 +45,7 @@
     <script type="text/javascript">
 var primer = new Mapper(document.getElementById("primer")),
     saved = document.getElementById("saved"),
+    session = document.getElementById("session"),
     area = new PlayArea();
     </script>
   </body>
