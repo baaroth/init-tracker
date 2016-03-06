@@ -4,15 +4,14 @@ function Combattant(node, name) {
       sels = node.getElementsByTagName("select"),
       spans = node.getElementsByTagName("span"),
       that = this,
-      namer = new Namer('data-id'),
       deleteBtn = inputs[4];
 
   this.idx = 0;
   this.node = node;
   this.fields={
-    con: namer.accumulate(inputs[2]),
-    hp: namer.accumulate(inputs[5]),
-    hp_max: namer.accumulate(inputs[1]),
+    con: inputs[2],
+    hp: inputs[5],
+    hp_max: inputs[1],
     fitness: spans[2],
     init: inputs[3]
   };
@@ -27,7 +26,6 @@ function Combattant(node, name) {
   };
 
   node.id=name;
-  namer.process(name);
   this.unmark();
   deleteBtn.className="";
   spans[1].className="";
@@ -36,6 +34,9 @@ function Combattant(node, name) {
   node.getElementsByTagName("p")[0].removeChild(spans[0]);
 
   // behavior
+  this.fields.con.addEventListener('change', function () { that.initFitness(); });
+  this.fields.hp.addEventListener('change', function () { that.updateFitness(); });
+  this.fields.hp_max.addEventListener('change', function () { that.initFitness(); });
   this.fields.init.addEventListener('change', function () { area.sort(that); });
   deleteBtn.addEventListener('click', function () { area.delete(that); });
 
@@ -111,24 +112,5 @@ Combattant.prototype={
     }
     this.fields.fitness.textContent=this.vals.fitness_states[i];
     this.vals.fitness_idx = i;
-  }
-};
-
-function Namer(attr_name) {
-  "use strict";
-  this.nodes=[];
-  this.attr_name=attr_name;
-}
-Namer.prototype={
-  accumulate: function(node) {
-    "use strict";
-    this.nodes.push(node);
-    return node;
-  },
-  process: function(attr_value) {
-    "use strict";
-    while (this.nodes.length > 0) {
-      this.nodes.pop().setAttribute(this.attr_name, attr_value);
-    }
   }
 };

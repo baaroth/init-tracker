@@ -67,13 +67,6 @@ PlayArea.prototype={
     "use strict";
     this.delete(this.dict.get(key));
   },
-  find: function(key) {
-    "use strict";
-    return this.dict.get(key) || {
-      initFitness: function() {},
-      updateFitness: function() {}
-    };
-  },
   markNext: function() {
     "use strict";
     this.trace("> markNext ");

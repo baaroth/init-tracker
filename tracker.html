@@ -16,8 +16,8 @@
     </div>
     <div id="primer" class="sep">
       <p><input type="text" placeholder="name"/>
-        : HP max <input type="text" class="num" onchange="area.find(this.getAttribute('data-id')).initFitness();"/>
-        / Con <input type="text" class="num" onchange="area.find(this.getAttribute('data-id')).initFitness();"/>
+        : HP max <input type="text" class="num"/>
+        / Con <input type="text" class="num"/>
         <span id="nat">/ Nature <select>
           <option value="1">std</option>
           <option value="2">Endurance</option>
@@ -26,7 +26,7 @@
         / Init <input type="text" class="num"/>
         <input type="button" value="[-]" class="out"/>
       </p>
-      <p>HP <input type="text" class="num" onchange="area.find(this.getAttribute('data-id')).updateFitness();"/>
+      <p>HP <input type="text" class="num"/>
         <span class="out">&rArr; &laquo;&nbsp;<span data-usage="fitness_out"></span>&nbsp;&raquo;</span>
       </p>
     </div>
