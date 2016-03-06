@@ -76,6 +76,30 @@ PlayArea.prototype={
     }
     return false;
   },
+  loadSession: function(key) {
+    "use strict";
+    var saved = store.load(key),
+        i, prop;
+    if (!saved) return;
+
+    this.payload.length = 0;
+    this.nextIdx = 0;
+    // payload
+    for (i = 0; i < saved.cs.length; ++i) {
+      this.template.fill(saved.cs[i]);
+      this.add(this.template);
+    }
+    // remaining saved values
+    for (prop in saved) {
+      if (saved.hasOwnProperty(prop) && this.hasOwnProperty(prop)) {
+        this[prop] = saved[prop];
+      }
+    }
+    this.currRd.value = saved.rd;
+    if (this.currRd.value && this.sel != null && this.sel < this.payload.length) {
+      this.payload[this.sel].mark();
+    }
+  },
   markNext: function() {
     "use strict";
     this.trace("> markNext ");
