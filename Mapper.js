@@ -14,7 +14,8 @@ function Mapper(node) {
     init: inputs[3],
     name: inputs[0],
     nature: sels[0],
-    nature_area: spans[0]
+    nature_area: spans[0],
+    saveBtn: inputs[6]
   };
 };
 Mapper.prototype={
@@ -22,6 +23,7 @@ Mapper.prototype={
     "use strict";
     // style
     this.mapped.deleteBtn.className="";
+    this.mapped.saveBtn.className="";
     this.mapped.fitness_area.className="";
     this.mapped.name.disabled=true;
     combattant.node.getElementsByTagName("p")[0].removeChild(this.mapped.nature_area);
@@ -37,5 +39,6 @@ Mapper.prototype={
     this.mapped.hp_max.addEventListener('change', function () { combattant.initFitness(); });
     this.mapped.init.addEventListener('change', function () { area.sort(combattant); });
     this.mapped.deleteBtn.addEventListener('click', function () { area.delete(combattant); });
+    this.mapped.saveBtn.addEventListener('click', function () { store.save(combattant); });
   }
 };
