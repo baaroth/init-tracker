@@ -1,4 +1,5 @@
 function PlayArea(node) {
+  "use strict";
   this.node = node;
   this.dict = new Map();
   this.nextIdx = 0;
@@ -10,6 +11,7 @@ function PlayArea(node) {
 }
 PlayArea.prototype={
   add: function(node) {
+    "use strict";
     var name = "c" + (this.nextIdx++),
         decorated = new Combattant(node.cloneNode(true), name);
 
@@ -19,6 +21,7 @@ PlayArea.prototype={
     this.sorted = false;
   },
   assertSortable: function() {
+    "use strict";
     var i, len = this.payload.length;
     if (len === 0) {
       alert("no item")
@@ -33,6 +36,7 @@ PlayArea.prototype={
     return true;
   },
   computeNextSel: function(objSelNext) {
+    "use strict";
     if (objSelNext) {
       for (var i = 0; i < this.payload.length; ++i) {
         if (this.payload[i] === onjSelNext) {
@@ -43,6 +47,7 @@ PlayArea.prototype={
     return null;
   },
   delete: function(key) {
+    "use strict";
     var deleted = this.dict.get(key),
         index;
     if (!deleted) return false;
@@ -59,12 +64,14 @@ PlayArea.prototype={
     this.trace("< delete(" + key + ") ");
   },
   find: function(key) {
+    "use strict";
     return this.dict.get(key) || {
       initFitness: function() {},
       updateFitness: function() {}
     };
   },
   markNext: function() {
+    "use strict";
     this.trace("> markNext ");
     var prevIdx = this.sel,
         prev = this.payload[prevIdx];
@@ -100,9 +107,11 @@ PlayArea.prototype={
     return true;
   },
   payloadAt: function(idx) {
+    "use strict";
     return this.payload[idx < this.payload.length ? idx : 0];
   },
   resetMarks: function() {
+    "use strict";
     var prev = this.payload[this.sel];
     if (prev) {
       prev.unmark();
@@ -111,13 +120,14 @@ PlayArea.prototype={
     this.sel = null;
   },
   sort: function(ref) {
+    "use strict";
     var changed, objSelNext, prefix;
     if (ref === "primer") return false;
     if (this.currRd.value === "" || !this.assertSortable()) return false;
 
     prefix = " sort";
-    if (ref) prefix = prefix + "("+ref+")"
-    prefix += " "
+    if (changed) prefix = prefix + "(" + ref + ")";
+    prefix += " ";
     this.trace(">" + prefix);
 
     changed = this.dict.get(ref);
@@ -135,6 +145,7 @@ PlayArea.prototype={
     return true;
   },
   trace: function(prefix) {
+    "use strict";
     var i, d, out = (prefix||'') + '[';
     for (i = 0; i < this.payload.length; ++i) {
       if (i > 0) out += ',';
@@ -146,6 +157,7 @@ PlayArea.prototype={
     console.log(out);
   },
   updatePayloadIdx(start) {
+    "use strict";
     var end = this.payload.length;
     for (var i = start; i < end; ++i) {
       this.payload[i].idx = i;

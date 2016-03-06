@@ -1,4 +1,5 @@
 function Combattant(node, name) {
+  "use strict";
   var inputs = node.getElementsByTagName("input"),
       sels = node.getElementsByTagName("select"),
       spans = node.getElementsByTagName("span"),
@@ -40,6 +41,7 @@ function Combattant(node, name) {
 }
 Combattant.prototype={
   initFitness:function() {
+    "use strict";
     var pts=this.vals.fitness_bpoints,
         stts=this.vals.fitness_states,
         con=this.fields.con.value,
@@ -85,12 +87,15 @@ Combattant.prototype={
     this.updateFitness();
   },
   mark: function() {
+    "use strict";
     this.node.className += " marked";
   },
   unmark: function() {
+    "use strict";
     this.node.className = "row";
   },
   updateFitness: function() {
+    "use strict";
     var hp = this.fields.hp.value,
         i = this.vals.fitness_idx;
     while (i>0 && hp >= this.vals.fitness_bpoints[i-1]) {
@@ -105,15 +110,18 @@ Combattant.prototype={
 };
 
 function Namer(attr_name) {
+  "use strict";
   this.nodes=[];
   this.attr_name=attr_name;
 }
 Namer.prototype={
   accumulate: function(node) {
+    "use strict";
     this.nodes.push(node);
     return node;
   },
   process: function(attr_value) {
+    "use strict";
     while (this.nodes.length > 0) {
       this.nodes.pop().setAttribute(this.attr_name, attr_value);
     }
