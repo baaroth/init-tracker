@@ -3,6 +3,7 @@ function Combattant(node, name) {
   var inputs = node.getElementsByTagName("input"),
       sels = node.getElementsByTagName("select"),
       spans = node.getElementsByTagName("span"),
+      that = this,
       namer = new Namer('data-id'),
       deleteBtn = namer.accumulate(inputs[4]);
 
@@ -13,7 +14,7 @@ function Combattant(node, name) {
     hp: namer.accumulate(inputs[5]),
     hp_max: namer.accumulate(inputs[1]),
     fitness: spans[2],
-    init: namer.accumulate(inputs[3])
+    init: inputs[3]
   };
   this.vals={
     fitness_idx: 0,
@@ -33,6 +34,9 @@ function Combattant(node, name) {
   inputs[0].disabled=true;
   // done after because modifies 'spans' array
   node.getElementsByTagName("p")[0].removeChild(spans[0]);
+
+  // behavior
+  this.fields.init.addEventListener('change', function () { area.sort(that); });
 
   if (!this.fields.hp.value) {
     this.fields.hp.value = this.fields.hp_max.value;

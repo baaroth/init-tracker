@@ -23,7 +23,7 @@
           <option value="2">Endurance</option>
           <option value="0">undead / construct</option>
         </select></span>
-        / Init <input type="text" class="num" onchange="area.sort(this.getAttribute('data-id'))" data-id="primer"/>
+        / Init <input type="text" class="num"/>
         <input type="button" value="[-]" class="out" onclick="area.delete(this.getAttribute('data-id'));"/>
       </p>
       <p>HP <input type="text" class="num" onchange="area.find(this.getAttribute('data-id')).updateFitness();"/>

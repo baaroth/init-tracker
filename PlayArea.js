@@ -119,18 +119,16 @@ PlayArea.prototype={
     this.currRd.value = "";
     this.sel = null;
   },
-  sort: function(ref) {
+  sort: function(changed) {
     "use strict";
-    var changed, objSelNext, prefix;
-    if (ref === "primer") return false;
+    var objSelNext, prefix;
     if (this.currRd.value === "" || !this.assertSortable()) return false;
 
     prefix = " sort";
-    if (changed) prefix = prefix + "(" + ref + ")";
+    if (changed) prefix = prefix + "(" + changed.node.id + ")";
     prefix += " ";
     this.trace(">" + prefix);
 
-    changed = this.dict.get(ref);
     if (changed && changed.idx <= this.sel) {
       changed.unmark();
       objSelNext = this.payloadAt(this.sel+1);
