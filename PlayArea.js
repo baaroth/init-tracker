@@ -1,7 +1,6 @@
 function PlayArea(node) {
   "use strict";
   this.node = node;
-  this.dict = new Map();
   this.nextIdx = 0;
   this.payload = [];
   this.sel = null;
@@ -16,7 +15,6 @@ PlayArea.prototype={
         decorated = new Combattant(node.cloneNode(true), name);
 
     this.node.appendChild(decorated.node);
-    this.dict.set(name, decorated);
     this.payload.push(decorated);
     this.sorted = false;
   },
@@ -55,17 +53,12 @@ PlayArea.prototype={
     this.trace("> delete(" + key + ") ");
     index = deleted.idx;
     this.node.removeChild(deleted.node);
-    this.dict.delete(key);
     this.payload.splice(index, 1);
     this.updatePayloadIdx(index);
     if (index <= this.sel) {
       this.selNext = this.sel;
     }
     this.trace("< delete(" + key + ") ");
-  },
-  deleteKey: function(key) {
-    "use strict";
-    this.delete(this.dict.get(key));
   },
   markNext: function() {
     "use strict";
