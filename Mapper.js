@@ -4,6 +4,7 @@ function Mapper(node) {
       sels = node.getElementsByTagName("select"),
       spans = node.getElementsByTagName("span");
 
+  this.node = node;
   this.mapped = {
     con: inputs[2],
     deleteBtn: inputs[4],

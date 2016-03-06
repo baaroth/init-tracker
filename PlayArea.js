@@ -1,22 +1,29 @@
-function PlayArea(node) {
+function PlayArea() {
   "use strict";
-  this.node = node;
+  this.node = window.document.getElementById('main');
   this.nextIdx = 0;
   this.payload = [];
   this.sel = null;
   this.selNext = null;
   this.currRd = window.document.getElementById('rd-counter');
   this.sorted = false;
+  this.template = new Mapper(primer.node.cloneNode(true))
 }
 PlayArea.prototype={
-  add: function(node) {
+  add: function(mapper) {
     "use strict";
     var name = "c" + (this.nextIdx++),
-        decorated = new Combattant(node.cloneNode(true), name);
+        decorated = new Combattant(mapper.node.cloneNode(true), name);
 
     this.node.appendChild(decorated.node);
     this.payload.push(decorated);
     this.sorted = false;
+  },
+  addStored: function(key) {
+    "use strict";
+    if (this.load(key, this.template)) {
+      this.add(this.template);
+    }
   },
   assertSortable: function() {
     "use strict";
@@ -37,7 +44,7 @@ PlayArea.prototype={
     "use strict";
     if (objSelNext) {
       for (var i = 0; i < this.payload.length; ++i) {
-        if (this.payload[i] === onjSelNext) {
+        if (this.payload[i] === objSelNext) {
           return i;
         }
       }
@@ -59,6 +66,15 @@ PlayArea.prototype={
       this.selNext = this.sel;
     }
     this.trace("< delete(" + key + ") ");
+  },
+  load: function(key, mapper) {
+    "use strict";
+    var saved = store.load(key);
+    if (saved) {
+      mapper.fill(saved);
+      return true;
+    }
+    return false;
   },
   markNext: function() {
     "use strict";
