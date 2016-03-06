@@ -14,10 +14,14 @@ var store= {
     }
     return null;
   },
-  save: function(combattant) {
+  save: function(key, obj) {
     "use strict";
-    var body = JSON.stringify(store.viewOf(combattant));
-    setTimeout(function() { localStorage.setItem(combattant.vals.name, body); }, 0);
+    setTimeout(function() { localStorage.setItem(key, JSON.stringify(obj)); }, 0);
+  },
+  saveCombattant: function(combattant) {
+    "use strict";
+    var body = store.viewOf(combattant);
+    store.save(combattant.vals.name, body);
   },
   saveSession: function(key) {
     "use strict";
@@ -31,7 +35,7 @@ var store= {
     for (i = 0; i < area.payload.length; ++i) {
       body.cs.push(store.viewOf(area.payload[i]));
     }
-    setTimeout(function() { localStorage.setItem(key, JSON.stringify(body)); }, 0);
+    store.save(key, body);
   },
   viewOf: function(combattant) {
     "use strict";

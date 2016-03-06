@@ -49,6 +49,6 @@ Mapper.prototype={
     this.mapped.hp_max.addEventListener('change', function () { combattant.initFitness(); });
     this.mapped.init.addEventListener('change', function () { area.sort(combattant); });
     this.mapped.deleteBtn.addEventListener('click', function () { area.delete(combattant); });
-    this.mapped.saveBtn.addEventListener('click', function () { store.save(combattant); });
+    this.mapped.saveBtn.addEventListener('click', function () { store.saveCombattant(combattant); });
   }
 };
