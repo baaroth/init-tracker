@@ -7,7 +7,7 @@ function PlayArea() {
   this.selNext = null;
   this.currRd = window.document.getElementById('rd-counter');
   this.sorted = false;
-  this.template = new Mapper(primer.node.cloneNode(true))
+  this.template = new Mapper(primer.node.cloneNode(true));
 }
 PlayArea.prototype={
   add: function(mapper) {
@@ -39,6 +39,15 @@ PlayArea.prototype={
       }
     }
     return true;
+  },
+  clearPayload: function() {
+    "use strict";
+    var i;
+    for (i = 0; i < this.payload.length; ++i) {
+      this.node.removeChild(this.payload[i].node);
+    }
+    this.payload.length = 0;
+    this.nextIdx = 0;
   },
   computeNextSel: function(objSelNext) {
     "use strict";
@@ -82,8 +91,7 @@ PlayArea.prototype={
         i, prop;
     if (!saved) return;
 
-    this.payload.length = 0;
-    this.nextIdx = 0;
+    this.clearPayload();
     // payload
     for (i = 0; i < saved.cs.length; ++i) {
       this.template.fill(saved.cs[i]);
@@ -109,15 +117,12 @@ PlayArea.prototype={
       prev.unmark();
     }
 
-    if (this.currRd.value === "") {
-      this.currRd.value = "0";
-    }
-    if (!this.sorted && !this.sort()) {
-      console.log("< markNext : sort error");
+    if (!this.sorted && !this.sort(null, true)) {
+      console.log("< markNext | sort error");
       return false;
     }
     if (this.payload.length <= 1) {
-      console.log("< markNext : nothing to do");
+      console.log("< markNext | nothing to do");
       this.sel = null;
       this.selNext = null;
       return false;
@@ -149,10 +154,10 @@ PlayArea.prototype={
     this.currRd.value = "";
     this.sel = null;
   },
-  sort: function(changed) {
+  sort: function(changed, ignoreRd) {
     "use strict";
     var objSelNext, prefix;
-    if (this.currRd.value === "" || !this.assertSortable()) return false;
+    if (!ignoreRd && this.currRd.value === "" || !this.assertSortable()) return false;
 
     prefix = " sort";
     if (changed) prefix = prefix + "(" + changed.node.id + ")";
