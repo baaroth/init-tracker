@@ -20,7 +20,7 @@ PlayArea.prototype={
     }
 
     name  = "c" + (this.nextIdx++);
-    decorated = new Combattant(mapper.node.cloneNode(true), name);
+    decorated = new Combattant(mapper, name);
 
     this.node.appendChild(decorated.node);
     this.payload.push(decorated);

@@ -1,25 +1,40 @@
-function Mapper(node) {
+function Mapper(node, includeArea) {
   "use strict";
   var inputs = node.getElementsByTagName("input"),
       sels = node.getElementsByTagName("select"),
-      spans = node.getElementsByTagName("span");
+      spans;
 
   this.node = node;
   this.mapped = {
     con: inputs[2],
     deleteBtn: inputs[4],
-    fitness: spans[2],
-    fitness_area: spans[1],
     hp: inputs[5],
     hp_max: inputs[1],
     init: inputs[3],
     name: inputs[0],
     nature: sels[0],
-    nature_area: spans[0],
     saveBtn: inputs[6]
   };
+  if (includeArea) {
+    spans = node.getElementsByTagName("span");
+    this.area = {
+      fitness: spans[1],
+      fitness_out: spans[2],
+      nature: spans[0]
+    };
+  }
 };
 Mapper.prototype={
+  copyFrom: function(otherMapper) {
+    "use strict";
+    var data = otherMapper.mapped,
+        prop;
+    for (prop in data) {
+      if (data.hasOwnProperty(prop) && this.mapped.hasOwnProperty(prop)) {
+        this.mapped[prop].value = data[prop].value;
+      }
+    }
+  },
   fill: function(data) {
     "use strict";
     var prop;
@@ -34,9 +49,9 @@ Mapper.prototype={
     // style
     this.mapped.deleteBtn.className="";
     this.mapped.saveBtn.className="";
-    this.mapped.fitness_area.className="";
+    this.area.fitness.className="";
     this.mapped.name.disabled=true;
-    combattant.node.getElementsByTagName("p")[0].removeChild(this.mapped.nature_area);
+    this.node.getElementsByTagName("p")[0].removeChild(this.area.nature);
 
     // values
     if (!this.mapped.hp.value) {

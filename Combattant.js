@@ -1,14 +1,15 @@
-function Combattant(node, name) {
+function Combattant(mapper, name) {
   "use strict";
-  var m = new Mapper(node);
+  var m;
 
   this.idx = 0;
-  this.node = node;
+  this.node = mapper.node.cloneNode(true);
+  m = new Mapper(this.node, true);
   this.fields={
     con: m.mapped.con,
     hp: m.mapped.hp,
     hp_max: m.mapped.hp_max,
-    fitness: m.mapped.fitness,
+    fitness: m.area.fitness_out,
     init: m.mapped.init
   };
   this.vals={
@@ -17,12 +18,16 @@ function Combattant(node, name) {
     fitness_states: [],
     hp_nl: 0,
     hp_tmp: 0,
-    name: m.mapped.name.value,
-    nature: m.mapped.nature.value
+    name: mapper.mapped.name.value,
+    nature: mapper.mapped.nature.value
   };
 
-  node.id=name;
+  this.node.id=name;
   this.unmark();
+  if (this.fields.hp_max.value !== mapper.mapped.hp_max.value) {
+    // [IE] cloneNode didn't copy input values
+    m.copyFrom(mapper);
+  }
   m.prepare(this);
   this.initFitness();
 }
