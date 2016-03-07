@@ -202,7 +202,7 @@ PlayArea.prototype={
     out += ']';
     console.log(out);
   },
-  updatePayloadIdx(start) {
+  updatePayloadIdx: function(start) {
     "use strict";
     var end = this.payload.length;
     for (var i = start; i < end; ++i) {
