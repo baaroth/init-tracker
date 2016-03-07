@@ -28,6 +28,14 @@ p {
 .sep {
   margin-top: 1rem;
 }
+.tech {
+  border: 0.0625rem dashed #3f3f3f;
+  background-color: #d5d5d5;
+  font-family: "Lucida Console", monospace;
+  font-size: 0.69rem;
+  max-width: 12rem;
+  padding: 0.25rem;
+}
 /* en dernier pour "gagner" */
 .row.marked {
   border-left: 0.25rem solid #008000;

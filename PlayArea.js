@@ -1,5 +1,6 @@
 function PlayArea() {
   "use strict";
+  this.enableTrace = window.document.getElementById('trace');
   this.node = window.document.getElementById('main');
   this.nextIdx = 0;
   this.payload = [];
@@ -39,6 +40,9 @@ PlayArea.prototype={
       }
     }
     return true;
+  },
+  canTrace: function() {
+    return this.enableTrace.checked;
   },
   clearPayload: function() {
     "use strict";
@@ -118,11 +122,11 @@ PlayArea.prototype={
     }
 
     if (!this.sorted && !this.sort(null, true)) {
-      console.log("< markNext | sort error");
+      if (this.canTrace()) console.log("< markNext | sort error");
       return false;
     }
     if (this.payload.length <= 1) {
-      console.log("< markNext | nothing to do");
+      if (this.canTrace()) console.log("< markNext | nothing to do");
       this.sel = null;
       this.selNext = null;
       return false;
@@ -179,7 +183,10 @@ PlayArea.prototype={
   },
   trace: function(prefix) {
     "use strict";
-    var i, d, out = (prefix||'') + '[';
+    var i, d, out;
+    if (!this.canTrace()) return;
+
+    out = (prefix||'') + '[';
     for (i = 0; i < this.payload.length; ++i) {
       if (i > 0) out += ',';
       out += this.payload[i].node.id;
