@@ -4,12 +4,12 @@ var store= {
     var str = localStorage.getItem(key),
         saved;
     if (!str) {
-      console.log("load | no such element: '" + key + "'");
+      console.error("load | no such element: '" + key + "'");
     } else {
       try {
         return JSON.parse(str);
       } catch(e) {
-        console.log("load | unable to parse data", e);
+        console.error("load | unable to parse data", e);
       }
     }
     return null;
@@ -20,12 +20,24 @@ var store= {
   },
   saveCombattant: function(combattant) {
     "use strict";
-    var body = store.viewOf(combattant);
-    store.save(combattant.vals.name, body);
+    if (!combattant) {
+      console.log("saveCombattant | nothing to save");
+      return;
+    }
+    store.save(combattant.vals.name, store.viewOf(combattant));
   },
   saveSession: function(key) {
     "use strict";
-    var i, key, body = {
+    var i, key, body;
+    if (!key) {
+      console.error("saveSession | no key");
+      return;
+    }
+    if (area.payload.length === 0) {
+      console.log("saveSession(" + key + ") | nothing to save");
+      return;
+    }
+    body = {
       rd: area.currRd.value,
       sel: area.sel,
       selNext: area.selNext,

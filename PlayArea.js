@@ -13,8 +13,14 @@ function PlayArea() {
 PlayArea.prototype={
   add: function(mapper) {
     "use strict";
-    var name = "c" + (this.nextIdx++),
-        decorated = new Combattant(mapper.node.cloneNode(true), name);
+    var decorated, name;
+    if (!mapper.mapped.name.value) {
+      console.error("add | no name");
+      return;
+    }
+
+    name  = "c" + (this.nextIdx++);
+    decorated = new Combattant(mapper.node.cloneNode(true), name);
 
     this.node.appendChild(decorated.node);
     this.payload.push(decorated);
