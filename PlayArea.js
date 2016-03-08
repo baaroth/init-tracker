@@ -13,9 +13,9 @@ function PlayArea() {
 PlayArea.prototype={
   add: function(mapper) {
     "use strict";
-    var decorated, name;
-    if (!mapper.mapped.name.value) {
-      console.error("add | no name");
+    var decorated, name, errors = mapper.validate();
+    if (errors.length !== 0) {
+      console.error("add | missing required input(s) : " + errors.join());
       return;
     }
 

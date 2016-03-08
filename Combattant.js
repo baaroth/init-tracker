@@ -6,11 +6,11 @@ function Combattant(mapper, name) {
   this.node = mapper.node.cloneNode(true);
   m = new Mapper(this.node, true);
   this.fields={
-    con: m.mapped.con,
-    hp: m.mapped.hp,
-    hp_max: m.mapped.hp_max,
+    con: m.input.con,
+    hp: m.input.hp,
+    hp_max: m.input.hp_max,
     fitness: m.area.fitness_out,
-    init: m.mapped.init
+    init: m.input.init
   };
   this.vals={
     fitness_idx: 0,
@@ -18,13 +18,13 @@ function Combattant(mapper, name) {
     fitness_states: [],
     hp_nl: 0,
     hp_tmp: 0,
-    name: mapper.mapped.name.value,
-    nature: mapper.mapped.nature.value
+    name: mapper.input.name.value,
+    nature: mapper.input.nature.value
   };
 
   this.node.id=name;
   this.unmark();
-  if (this.fields.hp_max.value !== mapper.mapped.hp_max.value) {
+  if (this.fields.hp_max.value !== mapper.input.hp_max.value) {
     // [IE] cloneNode didn't copy input values
     m.copyFrom(mapper);
   }
