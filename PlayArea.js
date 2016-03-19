@@ -9,6 +9,8 @@ function PlayArea() {
   this.currRd = window.document.getElementById('rd-counter');
   this.sorted = false;
   this.template = new Mapper(primer.node.cloneNode(true));
+
+  this.resetMarks();
 }
 PlayArea.prototype={
   add: function(mapper) {
@@ -122,7 +124,8 @@ PlayArea.prototype={
     "use strict";
     this.trace("> markNext ");
     var prevIdx = this.sel,
-        prev = this.payload[prevIdx];
+        prev = this.payload[prevIdx],
+        len = this.payload.length;
     if (prev) {
       prev.unmark();
     }
@@ -131,25 +134,35 @@ PlayArea.prototype={
       if (this.canTrace()) console.log("< markNext | sort error");
       return false;
     }
-    if (this.payload.length <= 1) {
-      if (this.canTrace()) console.log("< markNext | nothing to do");
-      this.sel = null;
-      this.selNext = null;
-      return false;
+    if (len <= 1) {
+      return this.markNothing();
     }
 
     if (this.selNext != null) {
       this.sel = this.selNext;
       this.selNext = null;
-    } else if (this.sel != null && this.sel < (this.payload.length - 1)) {
+    } else if (this.sel != null && this.sel < (len - 1)) {
       ++this.sel;
     } else {
       this.sel = 0;
     }
+    while (this.payload[this.sel].cannotPlay()) {
+      if (this.sel < (len -1)) ++this.sel;
+      else this.sel = 0;
+      if (this.sel === prevIdx) {
+        return this.markNothing();
+      }
+    }
     this.payload[this.sel].mark();
-    if (this.sel === 0 && prevIdx !== this.sel) ++this.currRd.value;
+    if (prevIdx === null || prevIdx > this.sel) ++this.currRd.value;
     this.trace("< markNext ");
     return true;
+  },
+  markNothing: function() {
+    if (this.canTrace()) console.log("< markNext | nothing to do");
+    this.sel = null;
+    this.selNext = null;
+    return false;
   },
   payloadAt: function(idx) {
     "use strict";
@@ -196,6 +209,7 @@ PlayArea.prototype={
     for (i = 0; i < this.payload.length; ++i) {
       if (i > 0) out += ',';
       out += this.payload[i].node.id;
+      if (this.payload[i].cannotPlay()) out += '†';
       if (i === this.sel) out += '*';
       if (i === this.selNext) out +='!';
     }

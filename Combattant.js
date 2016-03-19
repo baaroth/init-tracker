@@ -32,6 +32,12 @@ function Combattant(mapper, name) {
   this.initFitness();
 }
 Combattant.prototype={
+  cannotPlay: function() {
+    "use strict";
+    var pts=this.vals.fitness_bpoints,
+        len=pts.length;
+    return len == 0 || this.fields.hp.value <= pts[len-1];
+  },
   initFitness:function() {
     "use strict";
     var pts=this.vals.fitness_bpoints,
@@ -68,10 +74,10 @@ Combattant.prototype={
         stts.push("-3");
       }
       pts.push(0);
-      pts.push(-cb-1);
       stts.push("out of combat");
-      pts.push(-con);
+      pts.push(-cb-1);
       stts.push("dying");
+      pts.push(-con);
       stts.push("dead");
     }
     // update view
