@@ -83,8 +83,10 @@ PlayArea.prototype={
     this.node.removeChild(deleted.node);
     this.payload.splice(index, 1);
     this.updatePayloadIdx(index);
-    if (index <= this.sel) {
-      this.selNext = this.sel;
+    if (index < this.sel) {
+      --this.sel;
+    } else if (index === this.sel) {
+      this.selNext = this.sel % this.payload.length;
     }
     this.trace("< delete(" + key + ") ");
   },
@@ -149,7 +151,7 @@ PlayArea.prototype={
     while (this.payload[this.sel].cannotPlay()) {
       if (this.sel < (len -1)) ++this.sel;
       else this.sel = 0;
-      if (this.sel === prevIdx) {
+      if (this.sel === prevIdx || prevIdx === null && this.sel === 1) {
         return this.markNothing();
       }
     }
