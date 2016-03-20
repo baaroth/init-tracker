@@ -9,7 +9,11 @@ function PlayArea() {
   this.currRd = window.document.getElementById('rd-counter');
   this.sorted = false;
   this.template = new Mapper(primer.node.cloneNode(true));
+  this.combattants = [];
+  this.cList = window.document.getElementById('cList_output');
+  this.sessions = [];
 
+  this.loadDict();
   this.resetMarks();
 }
 PlayArea.prototype={
@@ -28,9 +32,9 @@ PlayArea.prototype={
     this.payload.push(decorated);
     this.sorted = false;
   },
-  addStored: function(key) {
+  addStored: function(index) {
     "use strict";
-    if (this.load(key, this.template)) {
+    if (this.load(index, this.template)) {
       this.add(this.template);
     }
   },
@@ -90,14 +94,36 @@ PlayArea.prototype={
     }
     this.trace("< delete(" + key + ") ");
   },
-  load: function(key, mapper) {
+  load: function(index, mapper) {
     "use strict";
-    var saved = store.load(store.config.cKeyPrefix + key);
+    // the '-1' compensates offset, see #loadDict()
+    var saved = store.load(this.combattants[index - 1]);
     if (saved) {
       mapper.fill(saved);
       return true;
     }
     return false;
+  },
+  loadDict: function() {
+    "use strict";
+    var dict = store.load(store.config.dictKey),
+        cLen = store.config.cKeyPrefix.length,
+        sLen = store.config.sKeyPrefix.length,
+        i, index, val;
+    this.combattants.length = 0;
+    this.cList.textContent = "";
+    this.sessions.length = 0;
+    if (dict && dict.pop) {
+      for (i = 0; i < dict.length; ++i) {
+        val = dict[i];
+        if (val.startsWith(store.config.cKeyPrefix)) {
+          index = this.combattants.push(val);
+          this.cList.textContent = this.cList.textContent + index + ": " + val.substring(cLen) + " | ";
+        } else if (val.startsWith(store.config.sKeyPrefix)) {
+          this.sessions.push(val.substring(sLen));
+        }
+      }
+    }
   },
   loadSession: function(key) {
     "use strict";
