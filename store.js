@@ -1,4 +1,23 @@
 var store= {
+  config: {
+    dictKey: "tracker.keys",
+    cKeyPrefix: "tracker.c.",
+    sKeyPrefix: "tracker.s."
+  },
+  addToDict: function(key) {
+    "use strict";
+    var dict = store.load(store.config.dictKey),
+        i;
+    if (!dict || !dict.pop) {
+      dict = [];
+    } else {
+      for (i = 0; i < dict.length; ++i) {
+        if (dict[i] === key) return; // avoid duplicates
+      }
+    }
+    dict.push(key);
+    store.save(store.config.dictKey, dict);
+  },
   load: function(key) {
     "use strict";
     var str = localStorage.getItem(key),
@@ -14,21 +33,41 @@ var store= {
     }
     return null;
   },
+  remove: function(key) {
+    "use strict";
+    var dict = store.load(store.config.dictKey),
+        i, index = null;
+    if (dict && dict.pop) {
+      for (i = 0; i < dict.length; ++i) {
+        if (dict[i] === key) {
+          index = i;
+          localStorage.removeItem(key);
+        }
+      }
+    }
+    if (index !== null) {
+      dict.splice(index, 1);
+      store.save(store.config.dictKey, dict);
+    }
+  },
   save: function(key, obj) {
     "use strict";
     setTimeout(function() { localStorage.setItem(key, JSON.stringify(obj)); }, 0);
   },
   saveCombattant: function(combattant) {
     "use strict";
+    var key;
     if (!combattant) {
       console.log("saveCombattant | nothing to save");
       return;
     }
-    store.save(combattant.vals.name, store.viewOf(combattant));
+    key = store.config.cKeyPrefix + combattant.vals.name;
+    store.save(key, store.viewOf(combattant));
+    store.addToDict(key);
   },
   saveSession: function(key) {
     "use strict";
-    var i, key, body;
+    var i, body, actualKey;
     if (!key) {
       console.error("saveSession | no key");
       return;
@@ -47,7 +86,9 @@ var store= {
     for (i = 0; i < area.payload.length; ++i) {
       body.cs.push(store.viewOf(area.payload[i]));
     }
-    store.save(key, body);
+    actualKey = store.config.sKeyPrefix + key;
+    store.save(actualKey, body);
+    store.addToDict(actualKey);
   },
   viewOf: function(combattant) {
     "use strict";

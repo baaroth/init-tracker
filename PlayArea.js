@@ -92,7 +92,7 @@ PlayArea.prototype={
   },
   load: function(key, mapper) {
     "use strict";
-    var saved = store.load(key);
+    var saved = store.load(store.config.cKeyPrefix + key);
     if (saved) {
       mapper.fill(saved);
       return true;
@@ -101,7 +101,7 @@ PlayArea.prototype={
   },
   loadSession: function(key) {
     "use strict";
-    var saved = store.load(key),
+    var saved = store.load(store.config.sKeyPrefix + key),
         i, prop;
     if (!saved) return;
 
