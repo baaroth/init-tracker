@@ -101,7 +101,7 @@ PlayArea.prototype={
   },
   loadSession: function(key) {
     "use strict";
-    var saved = store.load(store.config.sKeyPrefix + key),
+    var saved = store.load(key),
         i, prop;
     if (!saved) return;
 

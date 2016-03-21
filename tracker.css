@@ -29,10 +29,20 @@ p {
   margin-top: 1rem;
 }
 .stored-item {
-  border: 0.0625rem inset #3f3f3f;
+  border: 0.0625rem inset #dadada;
   display: inline-block;
-  margin: 0 0.25rem;
+  margin: 0.125rem;
   padding: 0.125rem;
+  line-height: 1.125rem;
+}
+.stored-c .stored-item {
+  background-color: #B4B3F3;
+}
+.stored-s .stored-item {
+  background-color: #F3E5B3;
+}
+.stored-name {
+  margin: 0 0.125rem;
 }
 .tech {
   border: 0.0625rem dashed #3f3f3f;

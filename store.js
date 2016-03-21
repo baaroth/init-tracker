@@ -70,41 +70,44 @@ var store= {
 
 function Memory() {
   "use strict";
-  this.node = window.document.getElementById('memory');
-  this.cTemplate = window.document.getElementById('stored-template');
-  this.sessions = [];
+  var nodes = window.document.getElementById('memory').getElementsByTagName('div');
+  this.nodeC = nodes[1];
+  this.nodeS = nodes[2];
+  this.template = nodes[0];
 
   this.load();
 }
 Memory.prototype={
   add: function(key) {
     "use strict";
-    var copy = this.cTemplate.cloneNode(true),
+    var copy = this.template.cloneNode(true),
         inputs = copy.getElementsByTagName('input'),
         name = copy.getElementsByTagName('span')[0],
-        parent = this.node;
+        parent;
     copy.className = "stored-item";
-    copy.id = "";
-    name.textContent = key.substring(store.config.cKeyPrefix.length);
-    inputs[0].addEventListener('click', function () { area.load(key, primer); });
-    inputs[1].addEventListener('click', function () { area.addStored(key); });
-    inputs[2].addEventListener('click', function () { store.remove(key); parent.removeChild(copy); });
+    if (key.startsWith(store.config.sKeyPrefix)) {
+      parent = this.nodeS;
+      name.textContent = key.substring(store.config.sKeyPrefix.length);
+      inputs[0].addEventListener('click', function () { area.loadSession(key); });
+      copy.removeChild(inputs[1]); // so inputs[2] is shifted to [1]
+      inputs[1].addEventListener('click', function () { store.remove(key); parent.removeChild(copy); });
+    } else {
+      parent = this.nodeC;
+      name.textContent = key.substring(store.config.cKeyPrefix.length);
+      inputs[0].addEventListener('click', function () { area.load(key, primer); });
+      inputs[1].addEventListener('click', function () { area.addStored(key); });
+      inputs[2].addEventListener('click', function () { store.remove(key); parent.removeChild(copy); });
+    }
+    copy.id = "stored." + name.textContent;
     parent.appendChild(copy);
   },
   load: function() {
     "use strict";
     var dict = store.load(store.config.dictKey),
-        sLen = store.config.sKeyPrefix.length,
-        i, val;
-    this.sessions.length = 0;
+        i;
     if (dict && dict.pop) {
       for (i = 0; i < dict.length; ++i) {
-        val = dict[i];
-        if (val.startsWith(store.config.cKeyPrefix)) {
-          this.add(val);
-        } else if (val.startsWith(store.config.sKeyPrefix)) {
-          this.sessions.push(val.substring(sLen));
-        }
+        this.add(dict[i]);
       }
     }
   },
