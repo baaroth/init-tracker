@@ -67,7 +67,7 @@ Mapper.prototype={
     this.input.hp_max.addEventListener('change', function () { combattant.initFitness(); });
     this.input.init.addEventListener('change', function () { area.sort(combattant); });
     this.btn.delete.addEventListener('click', function () { area.delete(combattant); });
-    this.btn.save.addEventListener('click', function () { store.saveCombattant(combattant); });
+    this.btn.save.addEventListener('click', function () { mem.saveCombattant(combattant); });
   },
   validate: function() {
     return new Validator(this.input).validate();

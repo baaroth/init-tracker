@@ -28,6 +28,12 @@ p {
 .sep {
   margin-top: 1rem;
 }
+.stored-item {
+  border: 0.0625rem inset #3f3f3f;
+  display: inline-block;
+  margin: 0 0.25rem;
+  padding: 0.125rem;
+}
 .tech {
   border: 0.0625rem dashed #3f3f3f;
   background-color: #d5d5d5;

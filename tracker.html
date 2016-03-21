@@ -14,7 +14,7 @@
       <input type="button" value="reset" onclick="area.resetMarks()"/>
       <input type="button" value="next" onclick="area.markNext()"/>
       / session <input id="session" type="text"/>
-      <input type="button" value="save" onclick="store.saveSession(session.value)"/>
+      <input type="button" value="save" onclick="mem.saveSession(session.value)"/>
       <input type="button" value="reload" onclick="area.loadSession(session.value)"/>
       <input type="button" value="clear" onclick="area.clearPayload()"/>
     </p>
@@ -38,11 +38,13 @@
       </p>
     </div>
     <input type="button" value="[+]" onclick="area.add(primer)"/>
-    <div class="sep">
-      <span id="cList_output"></span>
-      <input id="saved" type="text" class="num"/>
-      <input type="button" value="load" onclick="area.load(saved.value, primer)"/>
-      <input type="button" value="add" onclick="area.addStored(saved.value)"/>
+    <div id="memory" class="sep">
+      <div id="stored-template" class="out">
+        <span data-usage="name_output"></span><br/>
+        <input type="button" value="load"/>
+        <input type="button" value="add"/>
+        <input type="button" value="delete"/>
+      </div>
     </div>
     <div class="sep tech">
       <label for="trace">trace :</label>
@@ -53,6 +55,7 @@
 var primer = new Mapper(document.getElementById("primer")),
     saved = document.getElementById("saved"),
     session = document.getElementById("session"),
+    mem = new Memory(),
     area = new PlayArea();
     </script>
   </body>
