@@ -38,11 +38,12 @@ PlayArea.prototype={
     "use strict";
     var i, len = this.payload.length;
     if (len === 0) {
-      alert("no item")
+      console.log("assertSortable | no item");
       return false;
     }
     for (i = 0; i < len; ++i) {
       if (!this.payload[i].fields.init.value) {
+        console.warn("assertSortable | " + this.payload[i].node.id + "'s init missing");
         alert("init missing");
         return false;
       }
