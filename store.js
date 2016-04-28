@@ -148,7 +148,7 @@ Memory.prototype={
     actualKey = store.config.sKeyPrefix + key;
     store.save(actualKey, body);
     if (store.addToDict(actualKey)) {
-      this.sessions.push(key);
+      this.add(key);
     }
   }
 };
