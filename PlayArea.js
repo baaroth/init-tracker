@@ -7,10 +7,9 @@ function PlayArea() {
   this.sel = null;
   this.selNext = null;
   this.currRd = window.document.getElementById('rd-counter');
+  this.currRd.value = "";
   this.sorted = false;
   this.template = new Mapper(primer.node.cloneNode(true));
-
-  this.resetMarks();
 }
 PlayArea.prototype={
   add: function(mapper) {
@@ -171,14 +170,20 @@ PlayArea.prototype={
     "use strict";
     return this.payload[idx < this.payload.length ? idx : 0];
   },
-  resetMarks: function() {
+  resetEncounter: function() {
     "use strict";
-    var prev = this.payload[this.sel];
-    if (prev) {
-      prev.unmark();
+    var elem;
+    for (var i = 0; i < this.payload.length; ++i) {
+      elem = this.payload[i];
+      if (i === this.sel) {
+        elem.unmark();
+      }
+      elem.fields.init.value = "";
     }
     this.currRd.value = "";
     this.sel = null;
+    this.selNext = null;
+    this.sorted = false;
   },
   sort: function(changed, ignoreRd) {
     "use strict";
