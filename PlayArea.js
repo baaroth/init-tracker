@@ -9,7 +9,7 @@ function PlayArea() {
   this.currRd = window.document.getElementById('rd-counter');
   this.currRd.value = "";
   this.sorted = false;
-  this.template = new Mapper(primer.node.cloneNode(true));
+  this.template = new CMapper(primer.node.cloneNode(true));
 }
 PlayArea.prototype={
   add: function(mapper) {

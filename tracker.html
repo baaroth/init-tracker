@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <script type="text/javascript" src="Combattant.js"></script>
-    <script type="text/javascript" src="Mapper.js"></script>
     <script type="text/javascript" src="PlayArea.js"></script>
+    <script type="text/javascript" src="Validator.js"></script>
     <script type="text/javascript" src="store.js"></script>
     <link type="text/css" rel="stylesheet" href="tracker.css" media="all">
     <title>Tracker</title>
@@ -53,7 +53,7 @@
     </div>
 
     <script type="text/javascript">
-var primer = new Mapper(document.getElementById("primer")),
+var primer = new CMapper(document.getElementById("primer")),
     saved = document.getElementById("saved"),
     session = document.getElementById("session"),
     mem = new Memory(),
