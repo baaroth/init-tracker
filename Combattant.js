@@ -5,10 +5,12 @@ function Combattant(mapper, name) {
   this.idx = 0;
   this.node = mapper.node.cloneNode(true);
   m = new CMapper(this.node, true);
+  this.btn_tmphp=m.btn.temp;
   this.fields={
     con: m.input.con,
     hp: m.input.hp,
     hp_max: m.input.hp_max,
+    hp_mod: m.input.hp_mod,
     fitness: m.area.fitness_out,
     init: m.input.init
   };
@@ -37,6 +39,27 @@ Combattant.prototype={
     var pts=this.vals.fitness_bpoints,
         len=pts.length;
     return len == 0 || this.fields.hp.value <= pts[len-1];
+  },
+  heal: function() {
+    "use strict";
+    var max=this.fields.hp_max.value,
+        val=this.fields.hp.value + this.fields.hp_mod.value;
+    this.fields.hp.value=(val > max) ? max : val;
+    this.updateFitness();
+    this.fields.hp_mod.value="";
+  },
+  hit: function() {
+    "use strict";
+    var val=this.fields.hp_mod.value;
+    if (this.vals.hp_tmp > val) {
+      this.vals.hp_tmp-=val;
+    } else {
+      this.fields.hp.value-=(val - this.vals.hp_tmp);
+      this.vals.hp_tmp=0;
+      this.updateFitness();
+    }
+    this.updateTmpHp();
+    this.fields.hp_mod.value="";
   },
   initFitness:function() {
     "use strict";
@@ -88,6 +111,12 @@ Combattant.prototype={
     "use strict";
     this.node.className += " marked";
   },
+  temp: function() {
+    "use strict";
+    this.vals.hp_tmp=this.fields.hp_mod.value;
+    this.updateTmpHp();
+    this.fields.hp_mod.value="";
+  },
   unmark: function() {
     "use strict";
     this.node.className = "row";
@@ -104,6 +133,10 @@ Combattant.prototype={
     }
     this.fields.fitness.textContent=this.vals.fitness_states[i];
     this.vals.fitness_idx = i;
+  },
+  updateTmpHp: function() {
+    "use strict";
+    this.btn_tmphp.value="temp (" + this.vals.hp_tmp + ")";
   }
 };
 function CMapper(node, complete) {
@@ -118,6 +151,7 @@ function CMapper(node, complete) {
     con: inputs[2],
     hp: inputs[5],
     hp_max: inputs[1],
+    hp_mod: inputs[6],
     init: inputs[3],
     name: inputs[0],
     nature: sels[0]
@@ -131,7 +165,10 @@ function CMapper(node, complete) {
     };
     this.btn = {
       delete: inputs[4],
-      save: inputs[6]
+      heal: inputs[8],
+      hit: inputs[7],
+      save: inputs[10],
+      temp: inputs[9]
     };
   }
 };
@@ -175,6 +212,9 @@ CMapper.prototype={
     this.input.hp_max.addEventListener('change', function () { combattant.initFitness(); });
     this.input.init.addEventListener('change', function () { area.sort(combattant); });
     this.btn.delete.addEventListener('click', function () { area.delete(combattant); });
+    this.btn.heal.addEventListener('click', function () { combattant.heal(); });
+    this.btn.hit.addEventListener('click', function () { combattant.hit(); });
+    this.btn.temp.addEventListener('click', function () { combattant.temp(); });
     this.btn.save.addEventListener('click', function () { mem.saveCombattant(combattant); });
   },
   validate: function() {
