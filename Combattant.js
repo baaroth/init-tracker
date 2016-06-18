@@ -41,7 +41,8 @@ Combattant.prototype={
     "use strict";
     var pts=this.vals.fitness_bpoints,
         len=pts.length;
-    return len == 0 || this.fields.hp.value <= pts[len-1];
+    return len == 0 || this.fields.hp.value <= pts[len-1]
+        || this._unconsious();
   },
   heal: function() {
     "use strict";
@@ -120,6 +121,7 @@ Combattant.prototype={
     "use strict";
     this._nonlethal(this.fields.hp_mod.value*-1);
     this.fields.hp_mod.value="";
+    this.updateFitness();
   },
   _nonlethal: function(val) {
     this.vals.hp_nl -= val;
@@ -133,6 +135,9 @@ Combattant.prototype={
     this.vals.hp_tmp=this.fields.hp_mod.value;
     this.updateTmpHp();
     this.fields.hp_mod.value="";
+  },
+  _unconsious: function() {
+    return this.vals.nature !== "0" && this.vals.hp_nl >= this.fields.hp.value;
   },
   unmark: function() {
     "use strict";
@@ -148,7 +153,11 @@ Combattant.prototype={
     while (hp <= this.vals.fitness_bpoints[i]) {
       ++i;
     }
-    this.fields.fitness.textContent=this.vals.fitness_states[i];
+    if (this._unconsious()) {
+      this.fields.fitness.textContent="unconscious";
+    } else {
+      this.fields.fitness.textContent=this.vals.fitness_states[i];
+    }
     this.vals.fitness_idx = i;
   },
   updateTmpHp: function() {
@@ -212,12 +221,17 @@ CMapper.prototype={
   },
   prepare: function(combattant) {
     "use strict";
+    var undead = combattant.vals.nature === "0";
     // style
     this.area.fitness.className="";
     this.btn.delete.className="";
     this.btn.save.className="";
     this.input.name.disabled=true;
     this.node.getElementsByTagName("p")[0].removeChild(this.area.nature);
+    if (undead) {
+      this.area.fitness.removeChild(this.btn.nl);
+      this.input.con.disabled=true;
+    }
 
     // values
     if (!this.input.hp.value) {
@@ -225,14 +239,16 @@ CMapper.prototype={
     }
 
     // behavior
-    this.input.con.addEventListener('change', function () { combattant.initFitness(); });
     this.input.hp.addEventListener('change', function () { combattant.updateFitness(); });
     this.input.hp_max.addEventListener('change', function () { combattant.initFitness(); });
     this.input.init.addEventListener('change', function () { area.sort(combattant); });
     this.btn.delete.addEventListener('click', function () { area.delete(combattant); });
     this.btn.heal.addEventListener('click', function () { combattant.heal(); });
     this.btn.hit.addEventListener('click', function () { combattant.hit(); });
-    this.btn.nl.addEventListener('click', function () { combattant.nonlethal(); });
+    if (!undead) {
+      this.input.con.addEventListener('change', function () { combattant.initFitness(); });
+      this.btn.nl.addEventListener('click', function () { combattant.nonlethal(); });
+    }
     this.btn.temp.addEventListener('click', function () { combattant.temp(); });
     this.btn.save.addEventListener('click', function () { mem.saveCombattant(combattant); });
   },
