@@ -21,11 +21,13 @@ function Combattant(mapper, name) {
     fitness_idx: 0,
     fitness_bpoints: [],
     fitness_states: [],
-    hp_nl: 0,
-    hp_tmp: 0,
+    hp_tmp: mapper.val.hp_tmp,
     name: mapper.input.name.value,
     nature: mapper.input.nature.value
   };
+  if (!this._undead()) {
+    this.vals.hp_nl = mapper.val.hp_nl;
+  }
 
   this.node.id=name;
   this.unmark();
@@ -35,6 +37,8 @@ function Combattant(mapper, name) {
   }
   m.prepare(this);
   this.initFitness();
+  this._nonlethal(0); // to update N.L. count
+  this._updateTmpHp();
 }
 Combattant.prototype={
   cannotPlay: function() {
@@ -64,7 +68,7 @@ Combattant.prototype={
       this.vals.hp_tmp=0;
       this.updateFitness();
     }
-    this.updateTmpHp();
+    this._updateTmpHp();
     this.fields.hp_mod.value="";
   },
   initFitness:function() {
@@ -124,6 +128,7 @@ Combattant.prototype={
     this.updateFitness();
   },
   _nonlethal: function(val) {
+    "use strict";
     this.vals.hp_nl -= val;
     if (this.vals.hp_nl < 0) {
       this.vals.hp_nl = 0;
@@ -132,12 +137,17 @@ Combattant.prototype={
   },
   temp: function() {
     "use strict";
-    this.vals.hp_tmp=this.fields.hp_mod.value;
-    this.updateTmpHp();
+    this.vals.hp_tmp=this.fields.hp_mod.value*1;
+    this._updateTmpHp();
     this.fields.hp_mod.value="";
   },
   _unconsious: function() {
-    return this.vals.nature !== "0" && this.vals.hp_nl >= this.fields.hp.value;
+    "use strict";
+    return !this._undead() && this.vals.hp_nl >= this.fields.hp.value;
+  },
+  _undead: function() {
+    "use strict";
+    return this.vals.nature === "0";
   },
   unmark: function() {
     "use strict";
@@ -160,7 +170,7 @@ Combattant.prototype={
     }
     this.vals.fitness_idx = i;
   },
-  updateTmpHp: function() {
+  _updateTmpHp: function() {
     "use strict";
     this.btn.hp_tmp.value="temp (" + this.vals.hp_tmp + ")";
   }
@@ -181,6 +191,10 @@ function CMapper(node, complete) {
     init: inputs[3],
     name: inputs[0],
     nature: sels[0]
+  };
+  this.val = {
+    hp_nl: 0,
+    hp_tmp: 0
   };
   if (complete) {
     spans = node.getElementsByTagName("span");
@@ -214,14 +228,18 @@ CMapper.prototype={
     "use strict";
     var prop;
     for (prop in data) {
-      if (data.hasOwnProperty(prop) && this.input.hasOwnProperty(prop)) {
-        this.input[prop].value = data[prop];
+      if (data.hasOwnProperty(prop)) {
+        if (this.input.hasOwnProperty(prop)) {
+          this.input[prop].value = data[prop];
+        } else if (this.val.hasOwnProperty(prop)) {
+          this.val[prop] = data[prop];
+        }
       }
     }
   },
   prepare: function(combattant) {
     "use strict";
-    var undead = combattant.vals.nature === "0";
+    var undead = combattant._undead();
     // style
     this.area.fitness.className="";
     this.btn.delete.className="";

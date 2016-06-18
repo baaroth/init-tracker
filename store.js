@@ -57,14 +57,19 @@ var store= {
   },
   viewOf: function(combattant) {
     "use strict";
-    return {
-      name: combattant.vals.name,
-      con: combattant.fields.con.value,
-      nature: combattant.vals.nature,
-      hp: combattant.fields.hp.value,
-      hp_max: combattant.fields.hp_max.value,
-      init: combattant.fields.init.value
-    };
+    var nl = combattant.vals.hp_nl,
+        tmp = combattant.vals.hp_tmp,
+        view = {
+          name: combattant.vals.name,
+          con: combattant.fields.con.value,
+          nature: combattant.vals.nature,
+          hp: combattant.fields.hp.value,
+          hp_max: combattant.fields.hp_max.value,
+          init: combattant.fields.init.value
+        };
+    if (nl) view.hp_nl = nl;
+    if (tmp) view.hp_tmp = tmp;
+    return view;
   }
 };
 
