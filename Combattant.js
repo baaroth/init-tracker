@@ -5,7 +5,10 @@ function Combattant(mapper, name) {
   this.idx = 0;
   this.node = mapper.node.cloneNode(true);
   m = new CMapper(this.node, true);
-  this.btn_tmphp=m.btn.temp;
+  this.btn={
+    hp_nl:m.btn.nl,
+    hp_tmp:m.btn.temp
+  };
   this.fields={
     con: m.input.con,
     hp: m.input.hp,
@@ -42,15 +45,17 @@ Combattant.prototype={
   },
   heal: function() {
     "use strict";
-    var max=this.fields.hp_max.value,
-        val=this.fields.hp.value + this.fields.hp_mod.value;
-    this.fields.hp.value=(val > max) ? max : val;
+    var max=this.fields.hp_max.value*1,
+        val=this.fields.hp_mod.value*1,
+        hp=this.fields.hp.value*1 + val;
+    this.fields.hp.value=(hp > max) ? max : hp;
+    this._nonlethal(val);
     this.updateFitness();
     this.fields.hp_mod.value="";
   },
   hit: function() {
     "use strict";
-    var val=this.fields.hp_mod.value;
+    var val=this.fields.hp_mod.value*1;
     if (this.vals.hp_tmp > val) {
       this.vals.hp_tmp-=val;
     } else {
@@ -111,6 +116,18 @@ Combattant.prototype={
     "use strict";
     this.node.className += " marked";
   },
+  nonlethal: function() {
+    "use strict";
+    this._nonlethal(this.fields.hp_mod.value*-1);
+    this.fields.hp_mod.value="";
+  },
+  _nonlethal: function(val) {
+    this.vals.hp_nl -= val;
+    if (this.vals.hp_nl < 0) {
+      this.vals.hp_nl = 0;
+    }
+    this.btn.hp_nl.value="n.l. (" + this.vals.hp_nl + ")";
+  },
   temp: function() {
     "use strict";
     this.vals.hp_tmp=this.fields.hp_mod.value;
@@ -136,7 +153,7 @@ Combattant.prototype={
   },
   updateTmpHp: function() {
     "use strict";
-    this.btn_tmphp.value="temp (" + this.vals.hp_tmp + ")";
+    this.btn.hp_tmp.value="temp (" + this.vals.hp_tmp + ")";
   }
 };
 function CMapper(node, complete) {
@@ -167,7 +184,8 @@ function CMapper(node, complete) {
       delete: inputs[4],
       heal: inputs[8],
       hit: inputs[7],
-      save: inputs[10],
+      nl: inputs[10],
+      save: inputs[11],
       temp: inputs[9]
     };
   }
@@ -214,6 +232,7 @@ CMapper.prototype={
     this.btn.delete.addEventListener('click', function () { area.delete(combattant); });
     this.btn.heal.addEventListener('click', function () { combattant.heal(); });
     this.btn.hit.addEventListener('click', function () { combattant.hit(); });
+    this.btn.nl.addEventListener('click', function () { combattant.nonlethal(); });
     this.btn.temp.addEventListener('click', function () { combattant.temp(); });
     this.btn.save.addEventListener('click', function () { mem.saveCombattant(combattant); });
   },
