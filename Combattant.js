@@ -245,10 +245,10 @@ CMapper.prototype={
     this.btn.delete.className="";
     this.btn.save.className="";
     this.input.name.disabled=true;
-    this.node.getElementsByTagName("p")[0].removeChild(this.area.nature);
+    removeNode(this.area.nature);
     if (undead) {
-      this.area.fitness.removeChild(this.btn.nl);
-      this.input.con.disabled=true;
+      removeNode(this.btn.nl);
+      removeNode(this.input.con);
     }
 
     // values

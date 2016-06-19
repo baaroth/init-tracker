@@ -80,7 +80,7 @@ PlayArea.prototype={
 
     this.trace("> delete(" + key + ") ");
     index = deleted.idx;
-    this.node.removeChild(deleted.node);
+    removeNode(deleted.node);
     this.payload.splice(index, 1);
     this.updatePayloadIdx(index);
     if (index < this.sel) {

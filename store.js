@@ -94,7 +94,7 @@ Memory.prototype={
       parent = this.nodeS;
       name.textContent = key.substring(store.config.sKeyPrefix.length);
       inputs[0].addEventListener('click', function () { area.loadSession(key); });
-      copy.removeChild(inputs[1]); // so inputs[2] is shifted to [1]
+      removeNode(inputs[1]); // so inputs[2] is shifted to [1]
       inputs[1].addEventListener('click', function () { store.remove(key); parent.removeChild(copy); });
     } else {
       parent = this.nodeC;
@@ -157,3 +157,7 @@ Memory.prototype={
     }
   }
 };
+
+function removeNode(node) {
+  node.parentElement.removeChild(node);
+}
