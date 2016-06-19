@@ -50,17 +50,17 @@ Combattant.prototype={
   },
   heal: function() {
     "use strict";
-    var max=this.fields.hp_max.value*1,
-        val=this.fields.hp_mod.value*1,
-        hp=this.fields.hp.value*1 + val;
+    var max=parseInt(this.fields.hp_max.value, 10),
+        val=parseInt(this.fields.hp_mod.value, 10),
+        hp=parseInt(this.fields.hp.value, 10) + val;
     this.fields.hp.value=(hp > max) ? max : hp;
-    this._nonlethal(val);
+    this._nonlethal(-val);
     this.updateFitness();
     this.fields.hp_mod.value="";
   },
   hit: function() {
     "use strict";
-    var val=this.fields.hp_mod.value*1;
+    var val=parseInt(this.fields.hp_mod.value, 10);
     if (this.vals.hp_tmp > val) {
       this.vals.hp_tmp-=val;
     } else {
@@ -123,13 +123,13 @@ Combattant.prototype={
   },
   nonlethal: function() {
     "use strict";
-    this._nonlethal(this.fields.hp_mod.value*-1);
+    this._nonlethal(parseInt(this.fields.hp_mod.value, 10));
     this.fields.hp_mod.value="";
     this.updateFitness();
   },
   _nonlethal: function(val) {
     "use strict";
-    this.vals.hp_nl -= val;
+    this.vals.hp_nl += val;
     if (this.vals.hp_nl < 0) {
       this.vals.hp_nl = 0;
     }
@@ -137,7 +137,7 @@ Combattant.prototype={
   },
   temp: function() {
     "use strict";
-    this.vals.hp_tmp=this.fields.hp_mod.value*1;
+    this.vals.hp_tmp=parseInt(this.fields.hp_mod.value, 10);
     this._updateTmpHp();
     this.fields.hp_mod.value="";
   },
