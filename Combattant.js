@@ -75,10 +75,8 @@ Combattant.prototype={
     "use strict";
     var pts=this.vals.fitness_bpoints,
         stts=this.vals.fitness_states,
-        con=this.fields.con.value,
-        max=this.fields.hp_max.value,
         nat=this.vals.nature,
-        h,q,m2,m4,c2,cb;
+        con,max,h,q,m2,m4,tolerance;
     // clean old values
     stts.length=0;
     pts.length=0;
@@ -88,13 +86,14 @@ Combattant.prototype={
       pts.push(0);
       stts.push("destroyed");
     } else {
+      max=this.fields.hp_max.val();
       m2 = max%2;
       h = (max-m2)/2;
       m4 = h%2;
       q = (h-m4)/2;
-      c2 = con%2;
-      cb = (con-c2)/2-5;
-      if (cb<0) cb=0;
+      con = this.fields.con.val();
+      tolerance = 4-((con-(con%2))/2);
+      if (tolerance>-1) tolerance=-1;
 
       if (nat==="1") {
         pts.push(3*q+((m4 === 1)?1:0));
@@ -108,7 +107,7 @@ Combattant.prototype={
       }
       pts.push(0);
       stts.push("out of combat");
-      pts.push(-cb-1);
+      pts.push(tolerance);
       stts.push("dying");
       pts.push(-con);
       stts.push("dead");
