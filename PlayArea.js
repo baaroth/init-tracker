@@ -41,7 +41,7 @@ PlayArea.prototype={
       return false;
     }
     for (i = 0; i < len; ++i) {
-      if (!this.payload[i].fields.init.value) {
+      if (!this.payload[i].fields.init.val()) {
         console.warn("assertSortable | " + this.payload[i].node.id + "'s init missing");
         alert("init missing");
         return false;
@@ -178,7 +178,7 @@ PlayArea.prototype={
       if (i === this.sel) {
         elem.unmark();
       }
-      elem.fields.init.value = "";
+      elem.fields.init.clear();
     }
     this.currRd.value = "";
     this.sel = null;
@@ -200,7 +200,7 @@ PlayArea.prototype={
       objSelNext = this.payloadAt(this.sel+1);
     }
     this.payload.sort(function (a, b) {
-      return b.fields.init.value - a.fields.init.value;
+      return b.fields.init.val() - a.fields.init.val();
     });
     this.updatePayloadIdx(0);
     this.selNext = this.computeNextSel(objSelNext);

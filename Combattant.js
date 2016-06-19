@@ -1,6 +1,6 @@
 function Combattant(mapper, name) {
   "use strict";
-  var m;
+  var m, hpmax;
 
   this.idx = 0;
   this.node = mapper.node.cloneNode(true);
@@ -10,13 +10,19 @@ function Combattant(mapper, name) {
     hp_tmp:m.btn.temp
   };
   this.fields={
-    con: m.input.con,
-    hp: m.input.hp,
-    hp_max: m.input.hp_max,
-    hp_mod: m.input.hp_mod,
+    con: null,
+    hp: null,
+    hp_max: new NumberInput(m.input.hp_max),
+    hp_mod: new NumberInput(m.input.hp_mod),
     fitness: m.area.fitness_out,
-    init: m.input.init
+    init: new NumberInput(m.input.init)
   };
+  hpmax = this.fields.hp_max;
+  this.fields.hp = new NumberInput(m.input.hp,
+    function(i) {
+      var max = hpmax.val();
+      return i > max ? max : i;
+    });
   this.vals={
     fitness_idx: 0,
     fitness_bpoints: [],
@@ -26,12 +32,13 @@ function Combattant(mapper, name) {
     nature: mapper.input.nature.value
   };
   if (!this._undead()) {
+    this.fields.con = new NumberInput(m.input.con);
     this.vals.hp_nl = mapper.val.hp_nl;
   }
 
   this.node.id=name;
   this.unmark();
-  if (this.fields.hp_max.value !== mapper.input.hp_max.value) {
+  if (this.fields.hp_max.val() !== mapper.input.hp_max.value) {
     // [IE] cloneNode didn't copy input values
     m.copyFrom(mapper);
   }
@@ -41,35 +48,40 @@ function Combattant(mapper, name) {
   this._updateTmpHp();
 }
 Combattant.prototype={
+  applyHeal: function() {
+    "use strict";
+    var val=this.fields.hp_mod.clear();
+    this.fields.hp.plus(val);
+    this._nonlethal(-val);
+    this.updateFitness();
+  },
+  applyHit: function() {
+    "use strict";
+    var val=this.fields.hp_mod.clear();
+    if (this.vals.hp_tmp > val) {
+      this.vals.hp_tmp-=val;
+    } else {
+      this.fields.hp.minus(val - this.vals.hp_tmp);
+      this.vals.hp_tmp=0;
+    }
+    this._updateTmpHp();
+  },
+  applyNonlethal: function() {
+    "use strict";
+    this._nonlethal(this.fields.hp_mod.clear());
+    this.updateFitness();
+  },
+  applyTemp: function() {
+    "use strict";
+    this.vals.hp_tmp=this.fields.hp_mod.clear();
+    this._updateTmpHp();
+  },
   cannotPlay: function() {
     "use strict";
     var pts=this.vals.fitness_bpoints,
         len=pts.length;
-    return len == 0 || this.fields.hp.value <= pts[len-1]
+    return len == 0 || this.fields.hp.val() <= pts[len-1]
         || this._unconsious();
-  },
-  heal: function() {
-    "use strict";
-    var max=parseInt(this.fields.hp_max.value, 10),
-        val=parseInt(this.fields.hp_mod.value, 10),
-        hp=parseInt(this.fields.hp.value, 10) + val;
-    this.fields.hp.value=(hp > max) ? max : hp;
-    this._nonlethal(-val);
-    this.updateFitness();
-    this.fields.hp_mod.value="";
-  },
-  hit: function() {
-    "use strict";
-    var val=parseInt(this.fields.hp_mod.value, 10);
-    if (this.vals.hp_tmp > val) {
-      this.vals.hp_tmp-=val;
-    } else {
-      this.fields.hp.value-=(val - this.vals.hp_tmp);
-      this.vals.hp_tmp=0;
-      this.updateFitness();
-    }
-    this._updateTmpHp();
-    this.fields.hp_mod.value="";
   },
   initFitness:function() {
     "use strict";
@@ -120,12 +132,6 @@ Combattant.prototype={
     "use strict";
     this.node.className += " marked";
   },
-  nonlethal: function() {
-    "use strict";
-    this._nonlethal(parseInt(this.fields.hp_mod.value, 10));
-    this.fields.hp_mod.value="";
-    this.updateFitness();
-  },
   _nonlethal: function(val) {
     "use strict";
     this.vals.hp_nl += val;
@@ -134,15 +140,9 @@ Combattant.prototype={
     }
     this.btn.hp_nl.value="n.l. (" + this.vals.hp_nl + ")";
   },
-  temp: function() {
-    "use strict";
-    this.vals.hp_tmp=parseInt(this.fields.hp_mod.value, 10);
-    this._updateTmpHp();
-    this.fields.hp_mod.value="";
-  },
   _unconsious: function() {
     "use strict";
-    return !this._undead() && this.vals.hp_nl >= this.fields.hp.value;
+    return !this._undead() && this.vals.hp_nl >= this.fields.hp.val();
   },
   _undead: function() {
     "use strict";
@@ -154,7 +154,7 @@ Combattant.prototype={
   },
   updateFitness: function() {
     "use strict";
-    var hp = this.fields.hp.value,
+    var hp = this.fields.hp.val(),
         i = this.vals.fitness_idx;
     while (i>0 && hp >= this.vals.fitness_bpoints[i-1]) {
       --i;
@@ -198,7 +198,7 @@ function CMapper(node, complete) {
   if (complete) {
     spans = node.getElementsByTagName("span");
     this.area = {
-      fitness: spans[1],
+      fitness_ctrl: spans[1],
       fitness_out: spans[2],
       nature: spans[0]
     };
@@ -240,7 +240,7 @@ CMapper.prototype={
     "use strict";
     var undead = combattant._undead();
     // style
-    this.area.fitness.className="";
+    this.area.fitness_ctrl.className="";
     this.btn.delete.className="";
     this.btn.save.className="";
     this.input.name.disabled=true;
@@ -252,21 +252,21 @@ CMapper.prototype={
 
     // values
     if (!this.input.hp.value) {
-      this.input.hp.value = this.input.hp_max.value;
+      combattant.fields.hp.val(combattant.fields.hp_max.val());
     }
 
     // behavior
-    this.input.hp.addEventListener('change', function () { combattant.updateFitness(); });
-    this.input.hp_max.addEventListener('change', function () { combattant.initFitness(); });
-    this.input.init.addEventListener('change', function () { area.sort(combattant); });
+    combattant.fields.hp._onchange = function() { combattant.updateFitness(); };
+    combattant.fields.hp_max._onchange = function() { combattant.initFitness(); };
+    combattant.fields.init._onchange = function() { area.sort(combattant); };
     this.btn.delete.addEventListener('click', function () { area.delete(combattant); });
-    this.btn.heal.addEventListener('click', function () { combattant.heal(); });
-    this.btn.hit.addEventListener('click', function () { combattant.hit(); });
+    this.btn.heal.addEventListener('click', function () { combattant.applyHeal(); });
+    this.btn.hit.addEventListener('click', function () { combattant.applyHit(); });
     if (!undead) {
       this.input.con.addEventListener('change', function () { combattant.initFitness(); });
-      this.btn.nl.addEventListener('click', function () { combattant.nonlethal(); });
+      this.btn.nl.addEventListener('click', function () { combattant.applyNonlethal(); });
     }
-    this.btn.temp.addEventListener('click', function () { combattant.temp(); });
+    this.btn.temp.addEventListener('click', function () { combattant.applyTemp(); });
     this.btn.save.addEventListener('click', function () { mem.saveCombattant(combattant); });
   },
   validate: function() {
