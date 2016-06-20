@@ -1,8 +1,8 @@
-function Combattant(mapper, name) {
+function Combattant(mapper, idx) {
   "use strict";
   var m, hpmax;
 
-  this.idx = 0;
+  this.idx = idx;
   this.node = mapper.node.cloneNode(true);
   m = new CMapper(this.node, true);
   this.btn={
@@ -36,7 +36,7 @@ function Combattant(mapper, name) {
     this.vals.hp_nl = mapper.val.hp_nl;
   }
 
-  this.node.id=name;
+  this.node.id = "c" + idx;
   this.unmark();
   if (this.fields.hp_max.val() !== mapper.input.hp_max.value) {
     // [IE] cloneNode didn't copy input values

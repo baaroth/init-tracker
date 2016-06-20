@@ -14,14 +14,13 @@ function PlayArea() {
 PlayArea.prototype={
   add: function(mapper) {
     "use strict";
-    var decorated, name, errors = mapper.validate();
+    var decorated, errors = mapper.validate();
     if (errors.length !== 0) {
       console.error("add | missing required input(s) : " + errors.join());
       return;
     }
 
-    name  = "c" + (this.nextIdx++);
-    decorated = new Combattant(mapper, name);
+    decorated = new Combattant(mapper, this.nextIdx++);
 
     this.node.appendChild(decorated.node);
     this.payload.push(decorated);
