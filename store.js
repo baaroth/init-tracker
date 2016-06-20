@@ -77,10 +77,11 @@ var store= {
 
 function Memory() {
   "use strict";
-  var nodes = window.document.getElementById('memory').getElementsByTagName('div');
-  this.nodeC = nodes[1];
-  this.nodeS = nodes[2];
-  this.template = nodes[0];
+  var mem = window.document.getElementById('memory'),
+      nodes = mem.getElementsByTagName('div');
+  this.nodeC = nodes[0];
+  this.nodeS = nodes[1];
+  this.template = mem.getElementsByTagName('article')[0];
 
   this.load();
 }
