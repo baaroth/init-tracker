@@ -21,7 +21,9 @@
     <div id="main" class="sep">
     </div>
     <div id="primer" class="sep">
-      <p><input type="text" placeholder="name"/>
+      <p>
+        <input type="button" value="x" class="out"/>
+        <input type="text" placeholder="name"/>
         : HP max <input type="text" class="num"/>
         / Con <input type="text" class="num"/>
         <span id="nat">/ Nature <select>
@@ -30,9 +32,8 @@
           <option value="0">undead / construct</option>
         </select></span>
         / Init <input type="text" class="num"/>
-        <input type="button" value="[-]" class="out"/>
       </p>
-      <p>HP <input type="text" class="num"/>
+      <p class="contd">HP <input type="text" class="num"/>
         <span class="out">&rArr; &laquo;&nbsp;<span data-usage="fitness_output"></span>&nbsp;&raquo;
         / <input type="text" class="num"/>
         <input type="button" value="hit"/>

@@ -183,12 +183,12 @@ function CMapper(node, complete) {
   this.node = node;
 
   this.input = {
-    con: inputs[2],
+    con: inputs[3],
     hp: inputs[5],
-    hp_max: inputs[1],
+    hp_max: inputs[2],
     hp_mod: inputs[6],
-    init: inputs[3],
-    name: inputs[0],
+    init: inputs[4],
+    name: inputs[1],
     nature: sels[0]
   };
   this.val = {
@@ -203,7 +203,7 @@ function CMapper(node, complete) {
       nature: spans[0]
     };
     this.btn = {
-      delete: inputs[4],
+      delete: inputs[0],
       heal: inputs[8],
       hit: inputs[7],
       nl: inputs[10],
@@ -241,7 +241,7 @@ CMapper.prototype={
     var undead = combattant._undead();
     // style
     this.area.fitness_ctrl.className="";
-    this.btn.delete.className="";
+    this.btn.delete.className="del-btn";
     this.btn.save.className="";
     this.input.name.disabled=true;
     removeNode(this.area.nature);

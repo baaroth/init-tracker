@@ -9,6 +9,15 @@ input, select {
 p {
   margin: 0.125rem 0;
 }
+.contd {
+  margin-left: 2.75rem;
+}
+#primer .contd {
+  margin-left: 0;
+}
+.del-btn {
+  margin-right: 0.5rem;
+}
 .num {
   width: 2rem;
 }
