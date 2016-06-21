@@ -15,7 +15,7 @@ p {
 #primer .contd {
   margin-left: 0;
 }
-.del-btn {
+.line-btn {
   margin-right: 0.5rem;
 }
 .num {
@@ -58,6 +58,9 @@ p {
   font-size: 0.69rem;
   max-width: 12rem;
   padding: 0.25rem;
+}
+#primer {
+  display: inline-block;
 }
 /* en dernier pour "gagner" */
 .row.marked {

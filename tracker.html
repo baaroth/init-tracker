@@ -25,10 +25,11 @@
     <div id="main" class="sep">
     </div>
   </section>
-  <section aria-label="template">
-    <article id="primer" class="sep">
+  <section aria-label="template" class="sep">
+    <input type="button" value="[+]" onclick="area.add(primer)" class="line-btn"/>
+    <article id="primer">
       <p>
-        <input type="button" value="x" class="out"/>
+        <input type="button" value="x" class="out line-btn"/>
         <input type="text" placeholder="name"/>
         : HP max <input type="text" class="num"/>
         / Con <input type="text" class="num"/>
@@ -39,18 +40,17 @@
         </select></span>
         / Init <input type="text" class="num"/>
       </p>
-      <p class="contd">HP <input type="text" class="num"/>
-        <span class="out">&rArr; &laquo;&nbsp;<span data-usage="fitness_output"></span>&nbsp;&raquo;
+      <p class="out">
+        HP <input type="text" class="num"/>
+        &rArr; &laquo;&nbsp;<span data-usage="fitness_output"></span>&nbsp;&raquo;
         / <input type="text" class="num"/>
         <input type="button" value="hit"/>
         <input type="button" value="heal"/>
         <input type="button" value="temp (0)"/>
         <input type="button" value="n.l. (0)"/>
         / <input type="button" value="save"/>
-        </span>
       </p>
       </article>
-      <input type="button" value="[+]" onclick="area.add(primer)"/>
     </section>
     <section id="memory" class="sep">
       <article data-usage="template.c" class="out">

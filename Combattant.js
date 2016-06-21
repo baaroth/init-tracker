@@ -198,8 +198,8 @@ function CMapper(node, complete) {
   if (complete) {
     spans = node.getElementsByTagName("span");
     this.area = {
-      fitness_ctrl: spans[1],
-      fitness_out: spans[2],
+      fitness_ctrl: node.getElementsByTagName("p")[1],
+      fitness_out: spans[1],
       nature: spans[0]
     };
     this.btn = {
@@ -240,13 +240,14 @@ CMapper.prototype={
     "use strict";
     var undead = combattant._undead();
     // style
-    this.area.fitness_ctrl.className="";
-    this.btn.delete.className="del-btn";
+    this.area.fitness_ctrl.className="contd";
+    this.btn.delete.className="line-btn";
     this.btn.save.className="";
     this.input.name.disabled=true;
     removeNode(this.area.nature);
     if (undead) {
       removeNode(this.btn.nl);
+      removeNode(this.input.con.previousSibling); // text
       removeNode(this.input.con);
     }
 
