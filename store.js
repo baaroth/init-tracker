@@ -99,12 +99,15 @@ Memory.prototype={
       inputs[0].addEventListener('click', function () { area.loadSession(key); });
       removeNode(inputs[1]); // so inputs[2] is shifted to [1]
       inputs[1].addEventListener('click', function () { store.remove(key); parent.removeChild(copy); });
-    } else {
+    } else if (key.startsWith(store.config.cKeyPrefix)) {
       parent = this.nodeC;
       name.textContent = key.substring(store.config.cKeyPrefix.length);
       inputs[0].addEventListener('click', function () { area.load(key, primer); });
       inputs[1].addEventListener('click', function () { area.addStored(key); });
       inputs[2].addEventListener('click', function () { store.remove(key); parent.removeChild(copy); });
+    } else {
+      console.error("add | unknown prefix in key: " + key);
+      return;
     }
     copy.id = "stored." + name.textContent;
     parent.appendChild(copy);
@@ -156,7 +159,7 @@ Memory.prototype={
     actualKey = store.config.sKeyPrefix + key;
     store.save(actualKey, body);
     if (store.addToDict(actualKey)) {
-      this.add(key);
+      this.add(actualKey);
     }
   }
 };
