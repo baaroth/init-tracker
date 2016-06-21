@@ -42,6 +42,7 @@ var store= {
       for (i = 0; i < dict.length; ++i) {
         if (dict[i] === key) {
           index = i;
+          console.log("deleted: " + localStorage.getItem(key));
           localStorage.removeItem(key);
         }
       }
