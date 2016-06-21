@@ -148,7 +148,7 @@ Memory.prototype={
       return;
     }
     body = {
-      rd: area.currRd.value,
+      rd: area.currRd.val(),
       sel: area.sel,
       selNext: area.selNext,
       sorted: area.sorted,

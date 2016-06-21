@@ -1,13 +1,13 @@
 function PlayArea() {
   "use strict";
+  this.currRd = new NumberInput(window.document.getElementById('rd-counter'));
+  this.currRd.clear();
   this.enableTrace = window.document.getElementById('trace');
   this.node = window.document.getElementById('main');
   this.nextIdx = 0;
   this.payload = [];
   this.sel = null;
   this.selNext = null;
-  this.currRd = window.document.getElementById('rd-counter');
-  this.currRd.value = "";
   this.sorted = false;
   this.template = new CMapper(primer.node.cloneNode(true));
 }
@@ -59,6 +59,7 @@ PlayArea.prototype={
     }
     this.payload.length = 0;
     this.nextIdx = 0;
+    this.resetEncounter();
   },
   computeNextSel: function(objSelNext) {
     "use strict";
@@ -116,8 +117,15 @@ PlayArea.prototype={
         this[prop] = saved[prop];
       }
     }
-    this.currRd.value = saved.rd;
-    if (this.currRd.value && this.sel != null && this.sel < this.payload.length) {
+    if (typeof saved.rd === "number") {
+      this.currRd.val(saved.rd);
+    } else if (typeof saved.rd === "string") {
+      this.currRd.val(parseInt(saved.rd, 10));
+    } else {
+      console.error("loadSession | unknown type of round: " + typeof saved.rd);
+    }
+
+    if (this.currRd.val() && this.sel != null && this.sel < this.payload.length) {
       this.payload[this.sel].mark();
     }
   },
@@ -155,7 +163,7 @@ PlayArea.prototype={
       }
     }
     this.payload[this.sel].mark();
-    if (prevIdx === null || prevIdx > this.sel) ++this.currRd.value;
+    if (prevIdx === null || prevIdx > this.sel) this.currRd.plus(1);
     this.trace("< markNext ");
     return true;
   },
@@ -179,7 +187,7 @@ PlayArea.prototype={
       }
       elem.fields.init.clear();
     }
-    this.currRd.value = "";
+    this.currRd.clear();
     this.sel = null;
     this.selNext = null;
     this.sorted = false;
@@ -187,7 +195,7 @@ PlayArea.prototype={
   sort: function(changed, ignoreRd) {
     "use strict";
     var objSelNext, prefix;
-    if (!ignoreRd && this.currRd.value === "" || !this.assertSortable()) return false;
+    if (!ignoreRd && this.currRd.val() === 0 || !this.assertSortable()) return false;
 
     prefix = " sort";
     if (changed) prefix = prefix + "(" + changed.node.id + ")";
