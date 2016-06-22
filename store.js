@@ -93,7 +93,7 @@ Memory.prototype={
         inputs = copy.getElementsByTagName('input'),
         name = copy.getElementsByTagName('span')[0],
         parent;
-    copy.className = "stored-item";
+    copy.classList.remove("out");
     if (key.startsWith(store.config.sKeyPrefix)) {
       parent = this.nodeS;
       name.textContent = key.substring(store.config.sKeyPrefix.length);

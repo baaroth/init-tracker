@@ -37,7 +37,7 @@ function Combattant(mapper, idx) {
   }
 
   this.node.id = "c" + idx;
-  this.unmark();
+  this.node.className = "row";
   if (this.fields.hp_max.val() !== mapper.input.hp_max.value) {
     // [IE] cloneNode didn't copy input values
     m.copyFrom(mapper);
@@ -130,7 +130,7 @@ Combattant.prototype={
   },
   mark: function() {
     "use strict";
-    this.node.className += " marked";
+    this.node.classList.add("marked");
   },
   _nonlethal: function(val) {
     "use strict";
@@ -150,7 +150,7 @@ Combattant.prototype={
   },
   unmark: function() {
     "use strict";
-    this.node.className = "row";
+    this.node.classList.remove("marked");
   },
   updateFitness: function() {
     "use strict";
@@ -166,6 +166,9 @@ Combattant.prototype={
       this.fields.fitness.textContent="unconscious";
     } else {
       this.fields.fitness.textContent=this.vals.fitness_states[i];
+    }
+    if (i == this.vals.fitness_states.length - 1) {
+      this.node.classList.add("dead");
     }
     this.vals.fitness_idx = i;
   },
@@ -240,9 +243,8 @@ CMapper.prototype={
     "use strict";
     var undead = combattant._undead();
     // style
-    this.area.fitness_ctrl.className="contd";
-    this.btn.delete.className="line-btn";
-    this.btn.save.className="";
+    this.area.fitness_ctrl.classList.remove("out");
+    this.btn.delete.classList.remove("out");
     this.input.name.disabled=true;
     removeNode(this.area.nature);
     if (undead) {
