@@ -6,8 +6,8 @@ function PlayArea() {
   this.node = window.document.getElementById('main');
   this.nextIdx = 0;
   this.payload = [];
-  this.sel = null;
-  this.selNext = null;
+  this.sel = -1;
+  this.selNext = -1;
   this.sorted = false;
   this.template = new CMapper(primer.node.cloneNode(true));
 }
@@ -20,7 +20,7 @@ PlayArea.prototype={
       return;
     }
 
-    decorated = new Combattant(mapper, this.nextIdx++);
+    decorated = new Combattant(mapper, ("c" + this.nextIdx++));
 
     this.node.appendChild(decorated.node);
     this.payload.push(decorated);
@@ -61,17 +61,6 @@ PlayArea.prototype={
     this.nextIdx = 0;
     this.resetEncounter();
   },
-  computeNextSel: function(objSelNext) {
-    "use strict";
-    if (objSelNext) {
-      for (var i = 0; i < this.payload.length; ++i) {
-        if (this.payload[i] === objSelNext) {
-          return i;
-        }
-      }
-    }
-    return null;
-  },
   delete: function(deleted) {
     "use strict";
     var index, key;
@@ -79,16 +68,26 @@ PlayArea.prototype={
     key = deleted.node.id;
 
     this.trace("> delete(" + key + ") ");
-    index = deleted.idx;
-    removeNode(deleted.node);
+    index = this.indexOf(deleted);
     this.payload.splice(index, 1);
-    this.updatePayloadIdx(index);
     if (index < this.sel) {
       --this.sel;
     } else if (index === this.sel) {
       this.selNext = this.sel % this.payload.length;
     }
+    removeNode(deleted.node);
     this.trace("< delete(" + key + ") ");
+  },
+  indexOf: function(obj) {
+    "use strict";
+    if (obj) {
+      for (var i = 0; i < this.payload.length; ++i) {
+        if (this.payload[i] === obj) {
+          return i;
+        }
+      }
+    }
+    return -1;
   },
   load: function(key, mapper) {
     "use strict";
@@ -147,10 +146,10 @@ PlayArea.prototype={
       return this.markNothing();
     }
 
-    if (this.selNext != null) {
+    if (this.selNext !== -1) {
       this.sel = this.selNext;
-      this.selNext = null;
-    } else if (this.sel != null && this.sel < (len - 1)) {
+      this.selNext = -1;
+    } else if (this.sel !== -1 && this.sel < (len - 1)) {
       ++this.sel;
     } else {
       this.sel = 0;
@@ -169,8 +168,8 @@ PlayArea.prototype={
   },
   markNothing: function() {
     if (this.canTrace()) console.log("< markNext | nothing to do");
-    this.sel = null;
-    this.selNext = null;
+    this.sel = -1;
+    this.selNext = -1;
     return false;
   },
   payloadAt: function(idx) {
@@ -189,7 +188,7 @@ PlayArea.prototype={
     }
     this.currRd.clear();
     this.sel = null;
-    this.selNext = null;
+    this.selNext = -1;
     this.sorted = false;
   },
   sort: function(changed, ignoreRd) {
@@ -197,20 +196,17 @@ PlayArea.prototype={
     var objSelNext, prefix;
     if (!ignoreRd && this.currRd.val() === 0 || !this.assertSortable()) return false;
 
-    prefix = " sort";
-    if (changed) prefix = prefix + "(" + changed.node.id + ")";
-    prefix += " ";
+    prefix = changed ? (" sort(" + changed.node.id + ") ") : " sort ";
     this.trace(">" + prefix);
 
-    if (changed && changed.idx <= this.sel) {
+    if (changed && this.indexOf(changed) <= this.sel) {
       changed.unmark();
       objSelNext = this.payloadAt(this.sel+1);
     }
     this.payload.sort(function (a, b) {
       return b.fields.init.val() - a.fields.init.val();
     });
-    this.updatePayloadIdx(0);
-    this.selNext = this.computeNextSel(objSelNext);
+    this.selNext = this.indexOf(objSelNext);
     this.sorted = true;
     this.trace("<" + prefix);
     return true;
@@ -230,12 +226,5 @@ PlayArea.prototype={
     }
     out += ']';
     console.log(out);
-  },
-  updatePayloadIdx: function(start) {
-    "use strict";
-    var end = this.payload.length;
-    for (var i = start; i < end; ++i) {
-      this.payload[i].idx = i;
-    }
   }
 };
