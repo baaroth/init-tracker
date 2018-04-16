@@ -173,7 +173,7 @@ PlayArea.prototype={
       }
     }
     this.payload[this.sel].mark();
-    if (prevIdx === null || prevIdx > this.sel) this.currRd.plus(1);
+    if (prevIdx === -1 || prevIdx > this.sel) this.currRd.plus(1);
     this.trace("< markNext ");
     return true;
   },
