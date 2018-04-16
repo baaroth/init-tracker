@@ -7,6 +7,7 @@
     <script type="text/javascript" src="NumberInput.js"></script>
     <script type="text/javascript" src="Validator.js"></script>
     <script type="text/javascript" src="store.js"></script>
+    <script type="text/javascript" src="bindings.js"></script>
     <link type="text/css" rel="stylesheet" href="tracker.css" media="all">
     <title>Tracker</title>
   </head>
@@ -73,13 +74,7 @@ var primer = new CMapper(document.getElementById("primer")),
     session = document.getElementById("session"),
     mem = new Memory(),
     area = new PlayArea();
-document.onkeypress = function(event) {
-  if (event.keyCode == 34) { // page-down
-    event.preventDefault();
-    event.stopPropagation();
-    area.markNext();
-  }
-}
+document.onkeypress = bindings.handle;
     </script>
     <footer role="contentinfo">&nbsp;</footer>
   </body>
