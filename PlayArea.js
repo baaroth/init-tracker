@@ -8,7 +8,7 @@ function PlayArea() {
   this.payload = [];
   this.sel = -1;
   this.selNext = -1;
-  this.sorted = false;
+  this.sorted = true; // empty array is OK
   this.template = new CMapper(primer.node.cloneNode(true));
 }
 PlayArea.prototype={

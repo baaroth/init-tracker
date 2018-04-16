@@ -73,6 +73,13 @@ var primer = new CMapper(document.getElementById("primer")),
     session = document.getElementById("session"),
     mem = new Memory(),
     area = new PlayArea();
+document.onkeypress = function(event) {
+  if (event.keyCode == 34) { // page-down
+    event.preventDefault();
+    event.stopPropagation();
+    area.markNext();
+  }
+}
     </script>
     <footer role="contentinfo">&nbsp;</footer>
   </body>
