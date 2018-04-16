@@ -194,7 +194,7 @@ PlayArea.prototype={
   sort: function(changed, ignoreRd) {
     "use strict";
     var objSelNext, prefix;
-    if (!ignoreRd && this.currRd.val() === 0 || !this.assertSortable()) return false;
+    if (!ignoreRd && !this.currRd.val() || !this.assertSortable()) return false;
 
     prefix = changed ? (" sort(" + changed.node.id + ") ") : " sort ";
     this.trace(">" + prefix);
