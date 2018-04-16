@@ -70,6 +70,12 @@ PlayArea.prototype={
     this.trace("> delete(" + key + ") ");
     index = this.indexOf(deleted);
     this.payload.splice(index, 1);
+    if (index < this.selNext) {
+      --this.selNext;
+    } else if (index === this.selNext) {
+      // unset : `markNext` will compute "natural" next
+      this.selNext = -1;
+    }
     if (index < this.sel) {
       --this.sel;
     } else if (index === this.sel) {
