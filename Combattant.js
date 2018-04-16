@@ -127,6 +127,10 @@ Combattant.prototype={
     this.vals.fitness_idx=0;
     this.updateFitness();
   },
+  initiative: function() {
+    "use strict";
+    return this.fields.init.val();
+  },
   mark: function() {
     "use strict";
     this.node.classList.add("marked");
