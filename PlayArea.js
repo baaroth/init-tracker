@@ -116,15 +116,20 @@ PlayArea.prototype={
         this[prop] = saved[prop];
       }
     }
-    if (typeof saved.rd === "number") {
+    if (!saved.rd) {
+      this.currRd.clear();
+    } else if (typeof saved.rd === "number") {
       this.currRd.val(saved.rd);
     } else if (typeof saved.rd === "string") {
       this.currRd.val(parseInt(saved.rd, 10));
     } else {
       console.error("loadSession | unknown type of round: " + typeof saved.rd);
     }
+    if (this.sel === null || this.sel >= this.payload.length) {
+      this.sel = -1;
+    }
 
-    if (this.currRd.val() && this.sel != null && this.sel < this.payload.length) {
+    if (this.currRd.val() && this.sel > -1) {
       this.payload[this.sel].mark();
     }
   },
@@ -187,7 +192,7 @@ PlayArea.prototype={
       elem.fields.init.clear();
     }
     this.currRd.clear();
-    this.sel = null;
+    this.sel = -1;
     this.selNext = -1;
     this.sorted = false;
   },

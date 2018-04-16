@@ -237,6 +237,9 @@ CMapper.prototype={
         }
       }
     }
+    if (!data.hp_nl) {
+      this.val.hp_nl = 0;
+    }
   },
   prepare: function(combattant) {
     "use strict";

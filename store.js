@@ -138,7 +138,8 @@ Memory.prototype={
   },
   saveSession: function(key) {
     "use strict";
-    var i, body, actualKey;
+    var i, body, actualKey,
+        _rd = area.currRd.val();
     if (!key) {
       console.error("saveSession | no key");
       return;
@@ -148,12 +149,14 @@ Memory.prototype={
       return;
     }
     body = {
-      rd: area.currRd.val(),
       sel: area.sel,
       selNext: area.selNext,
       sorted: area.sorted,
       cs: []
     };
+    if (_rd) {
+      body.rd = _rd
+    }
     for (i = 0; i < area.payload.length; ++i) {
       body.cs.push(store.viewOf(area.payload[i]));
     }
