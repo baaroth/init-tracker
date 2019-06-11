@@ -6,7 +6,7 @@ Binding.prototype={
   test: function(key) {
     "use strict";
     for (var i = 0; i < this.keys.length; ++i) {
-      if (this.keys[i] == key) {
+      if (this.keys[i] === key) {
         return true;
       }
     }
@@ -17,7 +17,8 @@ Binding.prototype={
 var bindings = {
   values: [
     new Binding([45], () => area.add(primer)), // <ins>
-    new Binding([34, 40], () => area.markNext()) // <page down> or <down>
+    new Binding([34, 39], () => area.markNext()), // <page down> or <right arrow>
+    new Binding([33, 37], () => area.markPrevious()) // <page up> or <left arrow>
   ],
   handle: function(event) {
     "use strict";
