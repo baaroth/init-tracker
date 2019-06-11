@@ -154,22 +154,19 @@ PlayArea.prototype={
       return false;
     }
     if (len <= 1) {
-      return this.markNothing();
+      return this.markNothing("Next");
     }
 
     if (this.selNext !== -1) {
       this.sel = this.selNext;
       this.selNext = -1;
-    } else if (this.sel !== -1 && this.sel < (len - 1)) {
-      ++this.sel;
     } else {
-      this.sel = 0;
+      this._next(len - 1);
     }
     while (this.payload[this.sel].cannotPlay()) {
-      if (this.sel < (len -1)) ++this.sel;
-      else this.sel = 0;
+      this._next(len - 1);
       if (this.sel === prevIdx || prevIdx === null && this.sel === 1) {
-        return this.markNothing();
+        return this.markNothing("Next");
       }
     }
     this.payload[this.sel].mark();
@@ -177,11 +174,61 @@ PlayArea.prototype={
     this.trace("< markNext ");
     return true;
   },
-  markNothing: function() {
-    if (this.canTrace()) console.log("< markNext | nothing to do");
+  markNothing: function(direction) {
+    "use strict";
+    if (this.canTrace()) console.log("< mark" + direction + " | nothing to do");
     this.sel = -1;
     this.selNext = -1;
     return false;
+  },
+  markPrevious: function() {
+    "use strict";
+    this.trace("> markPrevious ");
+    var prevIdx = this.sel,
+        prev,
+        len = this.payload.length;
+
+    if (prevIdx === -1 || len <= 1) {
+      return this.markNothing("Previous");
+    } else if (prevIdx === 0 && this.currRd.val() === 1 && this.canTrace()) {
+      console.log("< markPrevious | nothing to do");
+      return false;
+    }
+
+    if (!this.sorted || this.selNext !== -1) {
+      console.log("< markPrevious | can only be used on sorted combattants !");
+      return false;
+    }
+
+    this._prev(len - 1);
+    while (this.payload[this.sel].cannotPlay()) {
+      this._prev(len - 1);
+      if (this.sel === prevIdx) {
+        return this.markNothing("Previous");
+      }
+    }
+
+    this.payload[prevIdx].unmark();
+    this.payload[this.sel].mark();
+    if (prevIdx < this.sel) this.currRd.minus(1);
+    this.trace("< markPrevious ");
+    return true;
+  },
+  _next: function(last) {
+    "use strict";
+    if (this.sel < last) {
+      ++this.sel;
+    } else {
+      this.sel = 0;
+    }
+  },
+  _prev: function(last) {
+    "use strict";
+    if (this.sel > 0) {
+      --this.sel;
+    } else {
+      this.sel = last;
+    }
   },
   payloadAt: function(idx) {
     "use strict";
